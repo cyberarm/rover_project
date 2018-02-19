@@ -20,6 +20,7 @@ module RoverProject
       @sdl_window = nil
 
       log("Supervisor", "Supervisor at your service")
+      log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
       run
     end
 
@@ -42,6 +43,8 @@ module RoverProject
             when SDL2::Event::Quit
               @run_supervisor = false
               break
+            when SDL2::Event::ControllerAxisMotion, SDL2::Event::ControllerButton, SDL2::Event::ControllerDevice
+              @active_program.gamepad_event(event) if @active_program
             when SDL2::Event::KeyUp, SDL2::Event::KeyDown
               @active_program.keyboard_event(event) if @active_program
             when SDL2::Event::MouseButtonDown, SDL2::Event::MouseMotion, SDL2::Event::MouseButtonUp

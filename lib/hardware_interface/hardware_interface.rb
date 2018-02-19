@@ -40,11 +40,8 @@ module RoverProject
 
     def reset_buttons
       @inputs.each do |k, klass|
-        # puts "Class: #{klass.class}"
-        if klass.is_a?(Input::Keyboard) || klass.is_a?(RoverProject::Input::Mouse)
-          klass.keys.each do |key, value|
-            key = nil if value == :released
-          end
+        klass.keys.each do |key, value|
+          key = nil if value == :released
         end
       end
     end

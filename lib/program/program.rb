@@ -22,6 +22,12 @@ module RoverProject
     def halt!
     end
 
+    def gamepad_event(sdl_event)
+      @hardware_interface.inputs.each do |k, klass|
+        klass.event(sdl_event) if klass.is_a?(Input::GamePad)
+      end
+    end
+
     def keyboard_event(sdl_event)
       @hardware_interface.inputs.each do |k, klass|
         klass.event(sdl_event) if klass.is_a?(Input::Keyboard)
