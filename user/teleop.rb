@@ -7,13 +7,13 @@ class TeleOp < RoverProject::Program
   end
 
   def loop
-    if input(:gamepad).left_bumper
+    if input(:gamepad) && input(:gamepad).left_bumper
       puts "LEFT BUMPER"
     end
   end
 
   def stop
-    puts "Shutdown."
+    log("TeleOp", "Shutdown.")
   end
 end
 

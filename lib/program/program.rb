@@ -3,9 +3,9 @@ module RoverProject
     PROGRAMS = []
     include ProgramMethods
     def initialize
+      setup
+      raise "No HardwareInterface!" unless @hardware_interface
     end
-
-    def
 
     def setup
     end
