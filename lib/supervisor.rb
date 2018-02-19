@@ -32,7 +32,7 @@ module RoverProject
       end
 
       log("Supervisor", "Creating SDL window for input reasons...")
-      @sdl_window = SDL2::Window.create("RoverProject", 100,100,100,100, 0)
+      @sdl_window = SDL2::Window.create("RoverProject", SDL2::Window::POS_CENTERED,SDL2::Window::POS_CENTERED,100,100, 0)
       @sdl_window.raise
 
       Thread.new do
@@ -42,13 +42,9 @@ module RoverProject
             when SDL2::Event::Quit
               @run_supervisor = false
               break
-            when SDL2::Event::KeyUp
+            when SDL2::Event::KeyUp, SDL2::Event::KeyDown
               @active_program.keyboard_event(event) if @active_program
-            when SDL2::Event::KeyDown
-              @active_program.keyboard_event(event) if @active_program
-            when SDL2::Event::MouseButtonUp
-              @active_program.mouse_event(event) if @active_program
-            when SDL2::Event::MouseButtonDown
+            when SDL2::Event::MouseButtonDown, SDL2::Event::MouseMotion, SDL2::Event::MouseButtonUp
               @active_program.mouse_event(event) if @active_program
             end
 

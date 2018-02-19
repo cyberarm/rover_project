@@ -19,20 +19,28 @@ module RoverProject
           @keys[sdl_event.button.to_s] = :released
         when SDL2::Event::MouseButtonDown
           @keys[sdl_event.button.to_s] = :holding
+        when SDL2::Event::MouseMotion
+          @x, @y = sdl_event.x, sdl_event.y
         end
-        # puts "Button ID: #{sdl_event.button.to_s}"
+        # puts "Button ID: #{sdl_event.button.to_s}" if defined?(sdl_event.button)
       end
 
       # @return [Integer] current mouse x position
       def x
-        @x
-        # Supervisor.instance.sdl_window.global_state.x
+        if SDL2::Mouse.global_state.x != nil
+          SDL2::Mouse.global_state.x
+        else
+          @x
+        end
       end
 
       # @return [Integer] current mouse x position
       def y
-        @y
-        # Supervisor.instance.sdl_window.global_state.y
+        if SDL2::Mouse.global_state.y != nil
+          SDL2::Mouse.global_state.y
+        else
+          @y
+        end
       end
 
       # @param mouse_button [String]

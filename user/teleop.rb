@@ -24,7 +24,7 @@ class TeleOp < RoverProject::Program
       if input(:mouse).released?("1")
         puts "Left Mouse is released."
       end
-      puts "Mouse X: #{input(:mouse).x}"
+      # puts "Mouse X: #{input(:mouse).x}, Y: #{input(:mouse).y}"
     end
   end
 

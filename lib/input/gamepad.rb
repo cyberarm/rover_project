@@ -1,7 +1,7 @@
 module RoverProject
   module Input
     class GamePad
-      def initialize
+      def initialize(type = :dualshock)
         if SDL2::Joystick.num_connected_joysticks == 0
           log("GamePad", "No controller detected, exiting...")
           exit
@@ -9,6 +9,7 @@ module RoverProject
       end
 
       def event(sdl_event)
+        p sdl_event.inspect
       end
 
       # @return [Integer] between -100 to +100
