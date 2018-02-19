@@ -2,11 +2,18 @@ if RUBY_ENGINE == "ruby" && RUBY_VERSION < "2.1.0"
   raise "Please use a newer ruby version that supports named arguments. Ruby 2.1.0+"
 end
 
-require "sinatra/base"
-require "sdl2"
-
 def log(tag, string)
   puts "[#{Time.now.strftime('%X')}][#{tag}] #{string}"
+end
+
+require "sinatra/base"
+require "sdl2"
+if File.exist?("/proc/cpuinfo") && File.open("/proc/cpuinfo").read.include?("armv7l-with")
+  log("BOOT", "Detected ARM arch, assuming running on a Pi.")
+  require "rpi_gpio"
+else
+  log("BOOT", "Did not detect ARM arch, using virtual gpio for testing.")
+  require_relative "lib/gpio"
 end
 
 require_relative "lib/supervisor"
@@ -15,6 +22,7 @@ require_relative "lib/program/program"
 require_relative "lib/program/server"
 require_relative "lib/motor/motor"
 require_relative "lib/motor/motor_controller"
+require_relative "lib/motor/controllers/l298n"
 require_relative "lib/input/gamepad"
 require_relative "lib/input/keyboard"
 require_relative "lib/input/mouse"

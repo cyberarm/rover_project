@@ -63,6 +63,7 @@ module RoverProject
           @active_program.loop
           @active_program.last_loop_time = (Time.now - @active_program.loop_time)
           @active_program.loop_time = Time.now
+          @active_program.hardware_interface.update_controllers
           @active_program.hardware_interface.reset_buttons
         end
 

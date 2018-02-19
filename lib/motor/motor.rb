@@ -3,10 +3,13 @@ module RoverProject
     BACKWARD = 0
     FORWARD  = 1
 
-    attr_reader :name
+    ZERO_FUZZ = 8 # Motors might not move at a power less than this so act like its zero
 
-    def initialize(initial_name, initial_power = 0, initial_direction = FORWARD)
+    attr_reader :name, :port, :power, :direction
+    alias :speed :power
+    def initialize(initial_name, port, initial_power = 0, initial_direction = FORWARD)
       set_name(initial_name)
+      @port = port
       set_power(initial_power)
       @initial_direction = initial_direction
       set_direction(initial_direction)
