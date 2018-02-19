@@ -51,7 +51,7 @@ module RoverProject
               @active_program.mouse_event(event) if @active_program
             end
 
-            sleep 0.005
+            # sleep 1/100_000.0
           end
           sleep 0.005
         end
@@ -61,6 +61,8 @@ module RoverProject
       while(@run_supervisor)
         if @active_program && @active_program.is_a?(Program)
           @active_program.loop
+          @active_program.last_loop_time = (Time.now - @active_program.loop_time)
+          @active_program.loop_time = Time.now
           @active_program.hardware_interface.reset_buttons
         end
 

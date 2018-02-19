@@ -2,7 +2,7 @@ module RoverProject
   module Input
     class GamePad
 
-      attr_reader :index, :type, :keys, :buttons
+      attr_reader :index, :type, :keys, :buttons, :axis
       def initialize(index = 0, type = :ps4)
         if SDL2::Joystick.num_connected_joysticks == 0
           log("GamePad", "No controller detected, exiting...")
@@ -11,8 +11,13 @@ module RoverProject
         @index = index
         @type  = type
 
+        @min_joystick_axis = -32768.0
+        @max_joystick_axis =  32767.0
+        @max_axis_value    = 255
+
         @keys = {} # Actives the same as mouse and keyboard
         @buttons = {} # holds only boolean values
+        @axis = {} # holds values of axis
 
         joystick = SDL2::Joystick.open(index)
           guid = joystick.GUID
@@ -35,6 +40,10 @@ module RoverProject
         return unless defined?(sdl_event.which) && sdl_event.which == index
 
         case sdl_event
+        when SDL2::Event::ControllerAxisMotion
+          axis = SDL2::GameController.axis_name_of(sdl_event.axis)
+          @axis[axis] = sdl_event.value
+          # p axis
         when SDL2::Event::ControllerButton
           button = SDL2::GameController.button_name_of(sdl_event.button)
           p button
@@ -64,20 +73,56 @@ module RoverProject
         end
       end
 
-      # @return [Integer] between -100 to +100
+      # @return [Integer] between -255 to +255
       def left_stick_x
+        if @axis["leftx"]
+          if @axis["leftx"] <= 0
+            ((@axis["leftx"]/@min_joystick_axis)*@max_axis_value).round
+          else
+            ((@axis["leftx"]/@max_joystick_axis)*@max_axis_value).round
+          end
+        else
+          0
+        end
       end
 
-      # @return [Integer] between -100 to +100
+      # @return [Integer] between -255 to +255
       def left_stick_y
+        if @axis["lefty"]
+          if @axis["lefty"] <= 0
+            ((@axis["lefty"]/@min_joystick_axis)*@max_axis_value).round
+          else
+            ((@axis["lefty"]/@max_joystick_axis)*@max_axis_value).round
+          end
+        else
+          0
+        end
       end
 
-      # @return [Integer] between -100 to +100
+      # @return [Integer] between -255 to +255
       def right_stick_x
+        if @axis["rightx"]
+          if @axis["rightx"] <= 0
+            ((@axis["rightx"]/@min_joystick_axis)*@max_axis_value).round
+          else
+            ((@axis["rightx"]/@max_joystick_axis)*@max_axis_value).round
+          end
+        else
+          0
+        end
       end
 
-      # @return [Integer] between -100 to +100
+      # @return [Integer] between -255 to +255
       def right_stick_y
+        if @axis["righty"]
+          if @axis["righty"] <= 0
+            ((@axis["righty"]/@min_joystick_axis)*@max_axis_value).round
+          else
+            ((@axis["righty"]/@max_joystick_axis)*@max_axis_value).round
+          end
+        else
+          0
+        end
       end
 
       # @return [Boolean] Returns true if the `left_stick` is pressed
@@ -105,12 +150,22 @@ module RoverProject
         @buttons["rightshoulder"]
       end
 
-      # @return [Integer] between 0 to 100
+      # @return [Integer] between 0 to 255
       def left_trigger
+        if @axis["lefttrigger"]
+          ((@axis["lefttrigger"]/@max_joystick_axis)*@max_axis_value).round
+        else
+          0
+        end
       end
 
-      # @return [Integer] between 0 to 100
+      # @return [Integer] between 0 to 255
       def right_trigger
+        if @axis["righttrigger"]
+          ((@axis["righttrigger"]/@max_joystick_axis)*@max_axis_value).round
+        else
+          0
+        end
       end
 
       # @return [Boolean] Returns true if the `pause` button is pressed

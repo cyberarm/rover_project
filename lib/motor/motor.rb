@@ -8,6 +8,7 @@ module RoverProject
     def initialize(initial_name, initial_power = 0, initial_direction = FORWARD)
       set_name(initial_name)
       set_power(initial_power)
+      @initial_direction = initial_direction
       set_direction(initial_direction)
     end
 
@@ -24,7 +25,7 @@ module RoverProject
       @power
     end
 
-    # A power is a integer between 0 to 100
+    # A power is a integer between -255 to +255
     def set_power(integer)
       raise "power must be a whole number (Integer)" unless integer.is_a?(Integer)
       @power = integer

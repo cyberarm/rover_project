@@ -1,3 +1,7 @@
+if RUBY_ENGINE == "ruby" && RUBY_VERSION < "2.1.0"
+  raise "Please use a newer ruby version that supports named arguments. Ruby 2.1.0+"
+end
+
 require "sinatra/base"
 require "sdl2"
 

@@ -4,7 +4,10 @@ module RoverProject
     include ProgramMethods
 
     attr_reader :hardware_interface
+    attr_accessor :loop_time, :last_loop_time
     def initialize
+      @loop_time = Time.now
+      @last_loop_time = 0
       setup
       raise "No HardwareInterface!" unless @hardware_interface
     end

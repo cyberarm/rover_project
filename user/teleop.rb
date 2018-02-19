@@ -7,8 +7,18 @@ class TeleOp < RoverProject::Program
   end
 
   def loop
-    if input(:gamepad) && input(:gamepad).left_bumper
-      puts "LEFT BUMPER"
+    if input(:gamepad)
+      if input(:gamepad).left_bumper
+        puts "LEFT BUMPER"
+      end
+
+      # puts "Axis leftX: #{input(:gamepad).left_stick_x}"
+      # puts "Axis leftY: #{input(:gamepad).left_stick_y}"
+      # puts "Axis rightX: #{input(:gamepad).right_stick_x}"
+      # puts "Axis rightY: #{input(:gamepad).right_stick_y}"
+      # puts "Axis leftTrigger: #{input(:gamepad).left_trigger}"
+      # puts "Axis rightTrigger: #{input(:gamepad).right_trigger}"
+      # puts "Last loop time: #{last_loop_time}s"
     end
 
     if input(:keyboard) && input(:keyboard).holding?("W")
