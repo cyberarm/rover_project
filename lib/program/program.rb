@@ -2,6 +2,8 @@ module RoverProject
   class Program
     PROGRAMS = []
     include ProgramMethods
+
+    attr_reader :hardware_interface
     def initialize
       setup
       raise "No HardwareInterface!" unless @hardware_interface
@@ -18,6 +20,12 @@ module RoverProject
     end
 
     def halt!
+    end
+
+    def keyboard_event(sdl_event)
+      @hardware_interface.inputs.each do |k, klass|
+        klass.event(sdl_event) if klass.is_a?(Input::Keyboard)
+      end
     end
 
     def method_added(symbol)

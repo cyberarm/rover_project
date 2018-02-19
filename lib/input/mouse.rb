@@ -16,7 +16,7 @@ module RoverProject
       end
 
       # @return [Boolean] Returns true if the `mouse_button` is pressed
-      def pressing?(mouse_button)
+      def holding?(mouse_button)
       end
 
       # @return [Boolean] Returns true if the `mouse_button` is recently released

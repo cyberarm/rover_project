@@ -8,6 +8,9 @@ module RoverProject
         end
       end
 
+      def event(sdl_event)
+      end
+
       # @return [Integer] between -100 to +100
       def left_stick_x
       end

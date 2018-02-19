@@ -37,5 +37,16 @@ module RoverProject
     def add_input(name, klass)
       @inputs[name] = klass
     end
+
+    def reset_buttons
+      @inputs.each do |k, klass|
+        case klass.class
+        when Input::Keyboard
+          klass.keys.each do |key, value|
+            key = nil if value == :released
+          end
+        end
+      end
+    end
   end
 end

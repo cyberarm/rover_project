@@ -10,6 +10,13 @@ class TeleOp < RoverProject::Program
     if input(:gamepad) && input(:gamepad).left_bumper
       puts "LEFT BUMPER"
     end
+
+    if input(:keyboard) && input(:keyboard).holding?("W")
+      puts "W is pressed."
+    end
+    if input(:keyboard) && input(:keyboard).released?("W")
+      puts "W is released."
+    end
   end
 
   def stop
