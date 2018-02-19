@@ -46,10 +46,15 @@ module RoverProject
               @active_program.keyboard_event(event) if @active_program
             when SDL2::Event::KeyDown
               @active_program.keyboard_event(event) if @active_program
+            when SDL2::Event::MouseButtonUp
+              @active_program.mouse_event(event) if @active_program
+            when SDL2::Event::MouseButtonDown
+              @active_program.mouse_event(event) if @active_program
             end
 
-            sleep 0.01
+            sleep 0.005
           end
+          sleep 0.005
         end
       end
 

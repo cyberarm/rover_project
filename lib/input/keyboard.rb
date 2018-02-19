@@ -29,9 +29,10 @@ module RoverProject
       # @return [Boolean] Returns true if the `key_string` is recently released
       def released?(key_string)
         if @keys[key_string] && @keys[key_string] == :released
-          key = @keys[key_string]
           @keys[key_string] = nil
-          return key
+          true
+        else
+          false
         end
       end
     end

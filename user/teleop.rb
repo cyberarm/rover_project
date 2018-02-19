@@ -14,8 +14,17 @@ class TeleOp < RoverProject::Program
     if input(:keyboard) && input(:keyboard).holding?("W")
       puts "W is pressed."
     end
+    if input(:keyboard) && input(:keyboard).released?("Tab")
+      puts "Tab is released."
+    end
     if input(:keyboard) && input(:keyboard).released?("W")
       puts "W is released."
+    end
+    if input(:mouse)
+      if input(:mouse).released?("1")
+        puts "Left Mouse is released."
+      end
+      puts "Mouse X: #{input(:mouse).x}"
     end
   end
 
