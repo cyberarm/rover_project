@@ -43,7 +43,7 @@ module RoverProject
         when SDL2::Event::ControllerAxisMotion
           axis = SDL2::GameController.axis_name_of(sdl_event.axis)
           @axis[axis] = sdl_event.value
-          # p axis
+          # p "#{axis} -> #{sdl_event.value}"
         when SDL2::Event::ControllerButton
           button = SDL2::GameController.button_name_of(sdl_event.button)
           p button
@@ -89,10 +89,11 @@ module RoverProject
       # @return [Integer] between -255 to +255
       def left_stick_y
         if @axis["lefty"]
-          if @axis["lefty"] <= 0
-            ((@axis["lefty"]/@min_joystick_axis)*@max_axis_value).round
+          axis = @axis["lefty"]*-1
+          if axis < 0
+            -((axis/@min_joystick_axis)*@max_axis_value).round
           else
-            ((@axis["lefty"]/@max_joystick_axis)*@max_axis_value).round
+            ((axis/@max_joystick_axis)*@max_axis_value).round
           end
         else
           0
@@ -115,10 +116,11 @@ module RoverProject
       # @return [Integer] between -255 to +255
       def right_stick_y
         if @axis["righty"]
-          if @axis["righty"] <= 0
-            ((@axis["righty"]/@min_joystick_axis)*@max_axis_value).round
+          axis = @axis["righty"]*-1
+          if axis < 0
+            -((axis/@min_joystick_axis)*@max_axis_value).round
           else
-            ((@axis["righty"]/@max_joystick_axis)*@max_axis_value).round
+            ((axis/@max_joystick_axis)*@max_axis_value).round
           end
         else
           0

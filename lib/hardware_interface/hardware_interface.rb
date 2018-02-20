@@ -10,9 +10,14 @@ module RoverProject
       @inputs = {}
 
       setup
+      setup_controllers
     end
 
     def setup
+    end
+
+    def setup_controllers
+      @motor_controllers.each {|k, controller| controller.setup}
     end
 
     # @param name [Symbol] Name of controller e.g. :drivetrain

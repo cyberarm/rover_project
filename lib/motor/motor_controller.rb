@@ -7,8 +7,12 @@ module RoverProject
       @type = type
       @pins = pins
       @controller = Object.const_get("RoverProject::MotorController::#{type.to_s.upcase}").new(self)
-
+      raise "Too many pins (#{@pins.count}) for '#{self.name}', controller (#{@type.to_s.upcase}) only supports #{@controller.max_pins}" if @pins.count > @controller.max_pins
       @motors = []
+    end
+
+    def setup
+      @controller.setup
     end
 
     def update

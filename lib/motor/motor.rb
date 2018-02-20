@@ -34,10 +34,24 @@ module RoverProject
       @power = integer
     end
 
+    # returns relative direction for motor given @direction and @power
     def direction
-      @direction
+      if @direction == FORWARD
+        if @power <= 0
+          return BACKWARD
+        else
+          return FORWARD
+        end
+      else
+        if @power <= 0
+          return FORWARD
+        else
+          return BACKWARD
+        end
+      end
     end
 
+    # Sets direction for motor, useful if motor's 'forward' is the inverse of what you want.
     # Direction is either 1 or 0.
     # 0 for BACKWARD and 1 for FORWARD
     def set_direction(integer)

@@ -8,9 +8,9 @@ class TeleOp < RoverProject::Program
 
   def loop
     if input(:gamepad)
-      if input(:gamepad).left_bumper
-        puts "LEFT BUMPER"
-      end
+      motor(:left_drive).set_power(input(:gamepad).left_stick_y)
+      motor(:right_drive).set_power(input(:gamepad).right_stick_y)
+      # log("GAMEPAD", "left Y: #{input(:gamepad).left_stick_y}, right Y: #{input(:gamepad).right_stick_y}")
 
       # puts "Axis leftX: #{input(:gamepad).left_stick_x}"
       # puts "Axis leftY: #{input(:gamepad).left_stick_y}"
