@@ -23,6 +23,7 @@ module RoverProject
     end
 
     def halt!
+      RPi::GPIO.reset
     end
 
     def gamepad_event(sdl_event)

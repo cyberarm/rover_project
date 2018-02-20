@@ -4,6 +4,8 @@ An over ambitious project to create a robot control system.
 * This is the goal and does not function as such yet.
 
 ``` ruby
+require "rovoer_project"
+
 class VirtualHardwareInterface < RoverProject::HardwareInterface
   def setup
     add_motor_controller(name: :drivetrain, type: :L298N, pins: {enable_a: 0, in1: 1, in2: 2, in3: 3, in4: 4, enable_b: 5})
@@ -25,4 +27,6 @@ class TeleOp < RoverProject::Program
     motor(:right_drive).set_power(input(:gamepad).right_stick_y)
   end
 end
+
+RoverProject::Supervisor.new("0.0.0.0", 4567)
 ```
