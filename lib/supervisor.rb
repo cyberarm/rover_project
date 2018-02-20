@@ -50,8 +50,6 @@ module RoverProject
             when SDL2::Event::MouseButtonDown, SDL2::Event::MouseMotion, SDL2::Event::MouseButtonUp
               @active_program.mouse_event(event) if @active_program
             end
-
-            # sleep 1/100_000.0
           end
           sleep 0.005
         end

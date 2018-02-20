@@ -45,9 +45,9 @@ module RoverProject
         @motor_controller.motors.each do |motor|
           if motor.speed.between?(-Motor::ZERO_FUZZ, Motor::ZERO_FUZZ)
             set_pins(motor, :stop)
-          elsif motor.direction == Motor::FORWARD
+          elsif motor.direction == :forward
             set_pins(motor, :forward)
-          elsif motor.direction == Motor::BACKWARD
+          elsif motor.direction == :backward
             set_pins(motor, :backward)
           end
         end
@@ -80,7 +80,7 @@ module RoverProject
           RPi::GPIO.set_low(forward)
           RPi::GPIO.set_high(backward)
         end
-        # log("MotorController[L298N]", "Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
+        log("MotorController[L298N]", "Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
       end
     end
   end

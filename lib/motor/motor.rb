@@ -1,13 +1,10 @@
 module RoverProject
   class Motor
-    BACKWARD = 0
-    FORWARD  = 1
-
     ZERO_FUZZ = 8 # Motors might not move at a power less than this so act like its zero
 
     attr_reader :name, :port, :power, :direction
     alias :speed :power
-    def initialize(initial_name, port, initial_power = 0, initial_direction = FORWARD)
+    def initialize(initial_name, port, initial_power = 0, initial_direction = :forward)
       set_name(initial_name)
       @port = port
       set_power(initial_power)
@@ -36,27 +33,26 @@ module RoverProject
 
     # returns relative direction for motor given @direction and @power
     def direction
-      if @direction == FORWARD
+      if @direction == :forward
         if @power <= 0
-          return BACKWARD
+          return :backward
         else
-          return FORWARD
+          return :forward
         end
       else
         if @power <= 0
-          return FORWARD
+          return :forward
         else
-          return BACKWARD
+          return :backward
         end
       end
     end
 
     # Sets direction for motor, useful if motor's 'forward' is the inverse of what you want.
-    # Direction is either 1 or 0.
-    # 0 for BACKWARD and 1 for FORWARD
-    def set_direction(integer)
-      raise "Direction must 1 or 0" unless integer.is_a?(Integer) && (integer == FORWARD || integer == BACKWARD)
-      @direction = integer
+    # Direction is either :forward or :backward
+    def set_direction(symbol)
+      raise "Direction must ':forward' or ':backward'" unless symbol.is_a?(Symbol) && (symbol == :forward || symbol == :backward)
+      @direction = symbol
     end
   end
 end

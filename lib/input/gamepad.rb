@@ -4,10 +4,6 @@ module RoverProject
 
       attr_reader :index, :type, :keys, :buttons, :axis
       def initialize(index = 0, type = :ps4)
-        if SDL2::Joystick.num_connected_joysticks == 0
-          log("GamePad", "No controller detected, exiting...")
-          exit
-        end
         @index = index
         @type  = type
 
@@ -19,6 +15,14 @@ module RoverProject
         @buttons = {} # holds only boolean values
         @axis = {} # holds values of axis
 
+        if SDL2::Joystick.num_connected_joysticks == 0
+          log("GamePad", "No controller detected, exiting...")
+        else
+          setup
+        end
+      end
+
+      def setup
         joystick = SDL2::Joystick.open(index)
           guid = joystick.GUID
           log("Gamepad", "Joystick/Gamepad GUID: #{joystick.GUID}")
