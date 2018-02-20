@@ -4,7 +4,7 @@ An over ambitious project to create a robot control system.
 * This is the goal and does not function as such yet.
 
 ``` ruby
-require "rovoer_project"
+require "rover_project"
 
 class VirtualHardwareInterface < RoverProject::HardwareInterface
   def setup
