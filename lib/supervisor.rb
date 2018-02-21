@@ -77,12 +77,7 @@ module RoverProject
     end
 
     def set_program(klass)
-      if @active_program && @active_program.is_a?(Program)
-        log("Supervisor", "Stopping #{@active_program.class}...")
-        @active_program.stop
-        @active_program.halt!
-        log("Supervisor", "Stopped #{@active_program.class}.")
-      end
+      stop_program
 
       begin
         raise NameError unless Program.list.detect {|program| if program.to_s == klass.to_s; true; end}
@@ -90,6 +85,33 @@ module RoverProject
         log("Supervisor", "Started #{@active_program.class}.")
       rescue NameError
         log("Supervisor", "'#{klass}' is not a known program.")
+      end
+    end
+
+    def stop_program
+      if @active_program && @active_program.is_a?(Program)
+        log("Supervisor", "Stopping #{@active_program.class}...")
+        @active_program.stop
+        @active_program.halt!
+        log("Supervisor", "Stopped #{@active_program.class}.")
+        @active_program = nil
+      end
+    end
+
+    def telemetry
+      if @active_program
+        the_telemetry = ""
+        @active_program.hardware_interface.motor_controllers.each do |k, mc|
+          the_telemetry << "Motor Controller #{mc.type}<br />"
+          mc.motors.each do |motor|
+            the_telemetry << "#{motor.name} motor, power: #{motor.power}, direction: #{motor.direction}<br />"
+          end
+          the_telemetry << "<br />"
+          the_telemetry << "<br />"
+        end
+        {active_program: @active_program.class.to_s, telemetry: "#{the_telemetry}"}
+      else
+        {active_program: false, telemetry: ""}
       end
     end
   end

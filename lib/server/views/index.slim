@@ -1,14 +1,16 @@
 html
   head
-    title RoverProject
+    title Rover Project
+    script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+    script src="application.js"
     link href="/css/application.css" rel="stylesheet" type="text/css"
   body
     .container
         center
           h1 Rover Project
           h2 Program
-          - RoverProject::Program.list.each do |program|
-            select
+          select#program
+            - RoverProject::Program.list.each do |program|
               option value="#{program}" #{program}
           br
           br

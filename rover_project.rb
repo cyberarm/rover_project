@@ -8,6 +8,8 @@ end
 
 require "sinatra/base"
 require "sdl2"
+require "oj"
+
 if File.exist?("/proc/cpuinfo") && File.open("/proc/cpuinfo").read.include?("armv7l-with")
   log("BOOT", "Detected ARM arch, assuming running on a Pi.")
   require "rpi_gpio"

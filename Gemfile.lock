@@ -3,6 +3,8 @@ GEM
   specs:
     ffi (1.9.21)
     mustermann (1.0.2)
+    oj (3.4.0)
+    puma (3.11.2)
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
@@ -31,6 +33,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  oj
+  puma
   rpi_gpio
   ruby-sdl2
   sass
