@@ -3,7 +3,7 @@ module RoverProject
     class Keyboard
 
       attr_reader :keys
-      def initialize
+      def initialize(options = {})
         @keys = {}
       end
 

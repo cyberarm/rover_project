@@ -8,7 +8,7 @@ module RoverProject
       # SCROLL_DOWN   = 4
 
       attr_reader :keys
-      def initialize
+      def initialize(options = {})
         @keys = {}
         @x, @y = 0, 0
       end

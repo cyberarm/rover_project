@@ -39,10 +39,20 @@ module RoverProject
     end
 
     # @param name [Symbol] Name of input e.g. :gamepad
-    # @param klass [GamePad,Keyboard,Mouse] Instance of an input class e.g. GamePad.new
-    def add_input(name:, klass:)
+    # @param type [Symbol] Type of input e.g. :gamepad. :gampad, :keyboard, and :mouse are supported
+    # @param options [Hash] Optional hash to pass to input
+    def add_input(name:, type:, options: {})
       raise "Input name '#{name}' already in use!" if @inputs[name]
-      @inputs[name] = klass
+      case type
+      when :gamepad
+        @inputs[name] = Input::GamePad.new(options)
+      when :keyboard
+        @inputs[name] = Input::Keyboard.new(options)
+      when :mouse
+        @inputs[name] = Input::Mouse.new(options)
+      else
+        raise "Unknown input type '#{type}'"
+      end
     end
 
     def update_controllers

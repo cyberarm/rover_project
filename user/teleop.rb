@@ -21,8 +21,27 @@ class TeleOp < RoverProject::Program
       # puts "Last loop time: #{last_loop_time}s"
     end
 
+    if input(:keyboard) && !input(:gamepad)
+      if input(:keyboard).holding?("W")
+        motor(:left_drive).set_power(200)
+        motor(:right_drive).set_power(200)
+      elsif input(:keyboard).holding?("S")
+        motor(:left_drive).set_power(-200)
+        motor(:right_drive).set_power(-200)
+      elsif input(:keyboard).holding?("A")
+        motor(:left_drive).set_power(-200)
+        motor(:right_drive).set_power(200)
+      elsif input(:keyboard).holding?("D")
+        motor(:left_drive).set_power(200)
+        motor(:right_drive).set_power(-200)
+      else
+        motor(:left_drive).set_power(0)
+        motor(:right_drive).set_power(0)
+      end
+    end
+
     if input(:keyboard) && input(:keyboard).holding?("W")
-      puts "W is pressed."
+      # puts "W is pressed."
     end
     if input(:keyboard) && input(:keyboard).released?("Tab")
       puts "Tab is released."

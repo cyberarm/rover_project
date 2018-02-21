@@ -4,8 +4,8 @@ class VirtualHardwareInterface < RoverProject::HardwareInterface
     add_motor(name: :left_drive, motor_controller: :drivetrain, direction: :forward, port: :a)
     add_motor(name: :right_drive, motor_controller: :drivetrain, direction: :backward, port: :b)
 
-    add_input(name: :gamepad, klass: RoverProject::Input::GamePad.new)
-    add_input(name: :keyboard, klass: RoverProject::Input::Keyboard.new)
-    add_input(name: :mouse, klass: RoverProject::Input::Mouse.new)
+    # add_input(name: :gamepad, type: :gamepad)
+    add_input(name: :keyboard, type: :keyboard)
+    add_input(name: :mouse, type: :mouse)
   end
 end

@@ -3,20 +3,20 @@ module RoverProject
     class GamePad
 
       attr_reader :index, :type, :keys, :buttons, :axis
-      def initialize(index = 0, type = :ps4)
-        @index = index
-        @type  = type
+      def initialize(options = {index: 0, type: :ps4})
+        @index = options[:index]
+        @type  = options[:type]
 
         @min_joystick_axis = -32768.0
         @max_joystick_axis =  32767.0
         @max_axis_value    = 255
 
-        @keys = {} # Actives the same as mouse and keyboard
+        @keys = {} # Acts the same as in Mouse and Keyboard
         @buttons = {} # holds only boolean values
         @axis = {} # holds values of axis
 
         if SDL2::Joystick.num_connected_joysticks == 0
-          log("GamePad", "No controller detected, exiting...")
+          log("GamePad", "No controller detected!")
         else
           setup
         end
