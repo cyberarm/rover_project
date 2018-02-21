@@ -8,5 +8,9 @@ module RoverProject
 
       slim :index
     end
+
+    get "/css/application.css" do
+      sass :application
+    end
   end
 end

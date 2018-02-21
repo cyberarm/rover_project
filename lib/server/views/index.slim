@@ -1,10 +1,21 @@
 html
   head
     title RoverProject
+    link href="/css/application.css" rel="stylesheet" type="text/css"
   body
-    h1 RoverProject Program Server
-    h2 Programs
-    - RoverProject::Program.list.each do |program|
-      ul
-        li
-          a href="/?program=#{program}" #{program}
+    .container
+        center
+          h1 Rover Project
+          h2 Program
+          - RoverProject::Program.list.each do |program|
+            select
+              option value="#{program}" #{program}
+          br
+          br
+          .action_button
+            h1#action_button_text Start
+    .container
+      center
+        h1 Telemetry
+      .centered_box
+        h3#telemetry No data.<br/>more text thats wide<br/> text thats small

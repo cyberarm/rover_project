@@ -1,0 +1,68 @@
+body
+  background: #222
+  margin: 0
+  color: #777
+  text-shadow: 0 0 1px black
+  font-family: sans-serif
+
+input[type=text], input[type=password], input[type=email], select
+  width: 255pt
+  padding: 12pt 20pt
+  margin: 8pt 0
+  display: inline-block
+  border: 1pt solid #ccc
+  border-radius: 4pt
+  box-sizing: border-box
+  font-family: sans-serif
+  font-size: 1em
+
+h1, h2, h3, h4, h5, h6, p, code, pre, label
+  padding: 0pt
+  margin: 4pt
+
+.container
+  margin: 0 auto
+  margin-top: 25pt
+  padding: 1em
+  width: 500pt
+  background: #111
+  border-radius: 2pt
+  box-shadow: -1pt 1pt 3pt black
+
+.centered_box
+  margin: auto
+  width: -moz-max-content
+  width: -webkit-max-content
+  width: -o-max-content
+  width: -ms-max-content
+  width: max-content
+  h3
+    width: auto
+    white-space: nowrap
+    display: inline-block
+
+
+.action_button
+  width: 128pt
+  height: 128pt
+  border-radius: 100%
+  background: #400
+  border: solid black 1pt
+  box-shadow: 0pt 4pt 2pt black
+  display: table
+  transition: box-shadow .1s ease-in-out
+  transition: translate .1s ease-in-out
+  &:hover
+    background: #700
+  &:active
+    box-shadow: 1pt 1pt 1pt black
+    transform: translate(0, 4px)
+    background: #900
+
+#action_button_text
+    display: table-cell
+    vertical-align: middle
+    text-align: center
+    font-size: 40pt
+    &:hover
+      color: white
