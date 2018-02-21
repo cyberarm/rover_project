@@ -15,7 +15,7 @@ module RoverProject
       Supervisor.instance = self
       @host = host
       @port = port
-      @active_program = TeleOp.new#nil
+      @active_program = nil
       @run_supervisor = true
       @sdl_window = nil
 
@@ -70,6 +70,7 @@ module RoverProject
 
       if @active_program && @active_program.is_a?(Program)
         @active_program.stop
+        @active_program.halt!
         log("Supervisor", "Stopped #{@active_program.class}.")
       end
       log("Supervisor", "Exiting...")

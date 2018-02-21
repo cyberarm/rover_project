@@ -55,6 +55,13 @@ module RoverProject
       end
     end
 
+    def teardown
+      @motor_controllers.each {|k, mc| mc.teardown}
+      @motor_controllers.clear
+      @motors.clear
+      @inputs.clear
+    end
+
     def update_controllers
       @motor_controllers.each do |k, controller|
         controller.update

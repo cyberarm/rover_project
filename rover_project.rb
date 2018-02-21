@@ -19,7 +19,7 @@ end
 require_relative "lib/supervisor"
 require_relative "lib/program/program_methods"
 require_relative "lib/program/program"
-require_relative "lib/program/server"
+require_relative "lib/server/server"
 require_relative "lib/motor/motor"
 require_relative "lib/motor/motor_controller"
 require_relative "lib/motor/controllers/l298n"

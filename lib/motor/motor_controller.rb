@@ -19,6 +19,10 @@ module RoverProject
       @controller.update
     end
 
+    def teardown
+      @controller.teardown
+    end
+
     def add_motor(motor)
       if @motors.count >= @controller.max_motors
         raise "To many motors for controller '#{@name}' (#{@type.to_s.upcase})"

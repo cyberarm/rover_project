@@ -19,10 +19,10 @@ module RoverProject
     end
 
     def stop
-      halt!
     end
 
     def halt!
+      @hardware_interface.teardown
       RPi::GPIO.reset
     end
 

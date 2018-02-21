@@ -54,6 +54,11 @@ module RoverProject
         # log("MotorController[L298N]", "Updated!")
       end
 
+      def teardown
+        @port_a_pwm.stop if @port_a_pwm
+        @port_b_pwm.stop if @port_b_pwm
+      end
+
       def set_pins(motor, mode = :stop)
         pwm, forward, backward = nil, nil, nil
         if motor.port == :a
