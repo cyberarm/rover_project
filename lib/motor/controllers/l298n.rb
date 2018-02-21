@@ -85,7 +85,7 @@ module RoverProject
           RPi::GPIO.set_low(forward)
           RPi::GPIO.set_high(backward)
         end
-        log("MotorController[L298N]", "Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
+        # log("MotorController[L298N]", "Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
       end
     end
   end

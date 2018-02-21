@@ -75,5 +75,22 @@ module RoverProject
       end
       log("Supervisor", "Exiting...")
     end
+
+    def set_program(klass)
+      if @active_program && @active_program.is_a?(Program)
+        log("Supervisor", "Stopping #{@active_program.class}...")
+        @active_program.stop
+        @active_program.halt!
+        log("Supervisor", "Stopped #{@active_program.class}.")
+      end
+
+      begin
+        raise NameError unless Program.list.detect {|program| if program.to_s == klass.to_s; true; end}
+        @active_program = Object.const_get(klass).new
+        log("Supervisor", "Started #{@active_program.class}.")
+      rescue NameError
+        log("Supervisor", "'#{klass}' is not a known program.")
+      end
+    end
   end
 end

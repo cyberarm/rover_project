@@ -1,0 +1,10 @@
+html
+  head
+    title RoverProject
+  body
+    h1 RoverProject Program Server
+    h2 Programs
+    - RoverProject::Program.list.each do |program|
+      ul
+        li
+          a href="/?program=#{program}" #{program}
