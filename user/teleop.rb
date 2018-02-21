@@ -21,7 +21,7 @@ class TeleOp < RoverProject::Program
       # puts "Last loop time: #{last_loop_time}s"
     end
 
-    if input(:keyboard) && !input(:gamepad)
+    if input(:keyboard) && (!input(:gamepad).ready)
       if input(:keyboard).holding?("W")
         motor(:left_drive).set_power(200)
         motor(:right_drive).set_power(200)

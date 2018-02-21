@@ -18,6 +18,7 @@ module RoverProject
       @active_program = nil
       @run_supervisor = true
       @sdl_window = nil
+      SDL2.init(SDL2::INIT_EVERYTHING)
 
       log("Supervisor", "Supervisor at your service")
       log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
@@ -41,16 +42,25 @@ module RoverProject
           while(event = SDL2::Event.poll)
             case event
             when SDL2::Event::Quit
+              log("Supervisor", "SDL received quit event, closing up shop...")
               @run_supervisor = false
               break
-            when SDL2::Event::ControllerAxisMotion, SDL2::Event::ControllerButton, SDL2::Event::ControllerDevice
+            when SDL2::Event::ControllerAxisMotion, SDL2::Event::ControllerButton, SDL2::Event::JoyDeviceAdded, SDL2::Event::JoyDeviceRemoved, SDL2::Event::ControllerDeviceAdded, SDL2::Event::ControllerDeviceRemoved
               @active_program.gamepad_event(event) if @active_program
             when SDL2::Event::KeyUp, SDL2::Event::KeyDown
               @active_program.keyboard_event(event) if @active_program
             when SDL2::Event::MouseButtonDown, SDL2::Event::MouseMotion, SDL2::Event::MouseButtonUp
               @active_program.mouse_event(event) if @active_program
+            when SDL2::Event::Window
+              # p event.inspect
             end
           end
+          if @sdl_window.destroy?
+            log("Supervisor", "Lost SDL window!")
+            @run_supervisor = false
+          end
+
+          @sdl_window.show
           sleep 0.005
         end
       end
@@ -73,6 +83,8 @@ module RoverProject
         @active_program.halt!
         log("Supervisor", "Stopped #{@active_program.class}.")
       end
+      ProgramServer.instance.shutdown
+      while (EM.reactor_running?); end
       log("Supervisor", "Exiting...")
     end
 

@@ -2,9 +2,10 @@ module RoverProject
   module Input
     class GamePad
 
-      attr_reader :index, :type, :keys, :buttons, :axis
+      attr_reader :device_index, :event_index, :type, :keys, :buttons, :axis, :ready
       def initialize(options = {})
-        @index = options[:index] ? options[:index] : 0
+        @device_index = 0
+        @event_index  = nil
         @type  = options[:type] ? options[:type] : :ps4
 
         @min_joystick_axis = -32768.0
@@ -14,6 +15,7 @@ module RoverProject
         @keys = {} # Acts the same as in Mouse and Keyboard
         @buttons = {} # holds only boolean values
         @axis = {} # holds values of axis
+        @ready = false
 
         if SDL2::Joystick.num_connected_joysticks == 0
           log("GamePad", "No controller detected!")
@@ -23,38 +25,61 @@ module RoverProject
       end
 
       def setup
-        joystick = SDL2::Joystick.open(index)
-          guid = joystick.GUID
-          log("Gamepad", "Joystick/Gamepad GUID: #{joystick.GUID}")
-        joystick.close
+        SDL2::Joystick.num_connected_joysticks.times do |i|
+          # next unless SDL2::Joystick.game_controller?(i)
+          joystick = SDL2::Joystick.open(i)
+            @guid = joystick.GUID
+            @device_index = i
+            @event_index  = joystick.index
+            log("Gamepad", "Joystick/Gamepad GUID: #{joystick.GUID}")
+          joystick.close
+        end
         # Mappings from https://github.com/gabomdq/SDL_GameControllerDB/blob/master/data/SDL_gamecontrollerdb2.0.4.h
-        # PS4 Controller
+        # PS4 Controller (Adjusted)
         case type
         when :ps4
-          SDL2::GameController.add_mapping("#{guid},PS4 Controller,a:b0,b:b1,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b10,leftshoulder:b4,leftstick:b11,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b12,righttrigger:a5,rightx:a3,righty:a4,start:b9,x:b3,y:b2,")
+          SDL2::GameController.add_mapping("#{@guid},PS4 Controller,a:b0,b:b1,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b10,leftshoulder:b4,leftstick:b11,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b12,righttrigger:a5,rightx:a3,righty:a4,start:b9,x:b3,y:b2,")
         else
-          SDL2::GameController.add_mapping("#{guid},XInput Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,")
+          SDL2::GameController.add_mapping("#{@guid},XInput Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,")
         end
 
-        @controller = SDL2::GameController.open(index)
+        if @event_index
+          @controller = SDL2::GameController.open(@device_index)
+          @ready = true
+        end
       end
 
       def event(sdl_event)
         # p sdl_event.inspect
-        return unless defined?(sdl_event.which) && sdl_event.which == index
+        # return unless defined?(sdl_event.which) && sdl_event.which == @event_index
 
         case sdl_event
         when SDL2::Event::ControllerAxisMotion
+          return unless defined?(sdl_event.which) && sdl_event.which == @event_index
           axis = SDL2::GameController.axis_name_of(sdl_event.axis)
           @axis[axis] = sdl_event.value
           # p "#{axis} -> #{sdl_event.value}"
         when SDL2::Event::ControllerButton
+          return unless defined?(sdl_event.which) && sdl_event.which == @event_index
           button = SDL2::GameController.button_name_of(sdl_event.button)
-          p button
+          # p button
           @keys[button] = sdl_event.pressed ? :holding : :released
           @buttons[button] = sdl_event.pressed
-        when SDL2::Event::ControllerDevice
-          p sdl_event
+        when SDL2::Event::JoyDeviceAdded
+          # p sdl_event
+          unless @ready
+            setup
+            @ready = true
+          end
+        when SDL2::Event::ControllerDeviceAdded
+          # p sdl_event
+        when SDL2::Event::ControllerDeviceRemoved
+          # p sdl_event
+        when SDL2::Event::JoyDeviceRemoved
+          # puts "Device Index: #{@device_index}, Event Index: #{@event_index} -> #{sdl_event.which}"
+          # p sdl_event
+          @controller.destroy
+          @ready = false
         end
       end
 

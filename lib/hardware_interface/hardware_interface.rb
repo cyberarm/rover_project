@@ -3,8 +3,6 @@ module RoverProject
 
     attr_reader :motor_controllers, :motors, :inputs
     def initialize
-      SDL2.init(SDL2::INIT_EVERYTHING)
-
       @motor_controllers = {}
       @motors = {}
       @inputs = {}

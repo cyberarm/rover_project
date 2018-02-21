@@ -2,6 +2,22 @@ module RoverProject
   class ProgramServer < Sinatra::Base
     connections = []
 
+    def self.instance
+      @instance
+    end
+    def self.instance=(klass)
+      @instance = klass
+    end
+
+    def initialize
+      ProgramServer.instance = self
+      super
+    end
+
+    def shutdown
+      EM.stop if EM.reactor_running?
+    end
+
     get "/" do
       slim :index
     end
