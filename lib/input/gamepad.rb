@@ -3,9 +3,9 @@ module RoverProject
     class GamePad
 
       attr_reader :index, :type, :keys, :buttons, :axis
-      def initialize(options = {index: 0, type: :ps4})
-        @index = options[:index]
-        @type  = options[:type]
+      def initialize(options = {})
+        @index = options[:index] ? options[:index] : 0
+        @type  = options[:type] ? options[:type] : :ps4
 
         @min_joystick_axis = -32768.0
         @max_joystick_axis =  32767.0
