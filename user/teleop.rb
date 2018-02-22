@@ -63,4 +63,7 @@ class TeleOp < RoverProject::Program
   end
 end
 
+class YetAnotherProgram < TeleOp
+end
+
 RoverProject::Supervisor.new("0.0.0.0", 4567)

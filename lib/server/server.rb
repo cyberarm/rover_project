@@ -1,5 +1,7 @@
 module RoverProject
   class ProgramServer < Sinatra::Base
+    set :bind, Proc.new{Supervisor.instance.host}
+    set :port, Proc.new{Supervisor.instance.port}
     connections = []
 
     def self.instance

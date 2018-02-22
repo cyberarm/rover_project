@@ -9,7 +9,7 @@ module RoverProject
     end
 
     attr_accessor :active_program
-    attr_reader :sdl_window
+    attr_reader :sdl_window, :host, :port
 
     def initialize(host, port)
       Supervisor.instance = self
