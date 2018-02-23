@@ -18,7 +18,7 @@ module RoverProject
       @active_program = nil
       @run_supervisor = true
       @sdl_window = nil
-      SDL2.init(SDL2::INIT_EVERYTHING)
+      SDL2.init(SDL2::INIT_GAMECONTROLLER|SDL2::INIT_EVENTS)
 
       log("Supervisor", "Supervisor at your service")
       log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
@@ -33,9 +33,9 @@ module RoverProject
         @run_supervisor = false
       end
 
-      log("Supervisor", "Creating SDL window for input reasons...")
-      @sdl_window = SDL2::Window.create("RoverProject", SDL2::Window::POS_CENTERED,SDL2::Window::POS_CENTERED,100,100, 0)
-      @sdl_window.raise
+      #log("Supervisor", "Creating SDL window for input reasons...")
+      #@sdl_window = SDL2::Window.create("RoverProject", SDL2::Window::POS_CENTERED,SDL2::Window::POS_CENTERED,100,100, 0)
+      #@sdl_window.raise
 
       Thread.new do
         while(@run_supervisor)
@@ -55,12 +55,12 @@ module RoverProject
               # p event.inspect
             end
           end
-          if @sdl_window.destroy?
-            log("Supervisor", "Lost SDL window!")
-            @run_supervisor = false
-          end
+          #if @sdl_window.destroy?
+          #  log("Supervisor", "Lost SDL window!")
+          #  @run_supervisor = false
+          #end
 
-          @sdl_window.show
+          #@sdl_window.show
           sleep 0.005
         end
       end
