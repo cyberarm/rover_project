@@ -24,6 +24,10 @@ module RoverProject
     def power
       @power
     end
+    
+    def pwm_speed
+	  ((@power/255.0)*100.0).abs
+	end
 
     # A power is a integer between -255 to +255
     def set_power(integer)

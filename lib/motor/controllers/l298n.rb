@@ -14,23 +14,30 @@ module RoverProject
 
       def setup
         RPi::GPIO.set_numbering(:board)
+        #log("L298N", "Cleaning up GPIO...")
+        RPi::GPIO.clean_up
+        #log("L298N", "GPIO Ready.")
 
         if @motor_controller.motors.count == 2
+		  RPi::GPIO.setup(@pins[:enable_a], as: :output)
           @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], 1000)
           @port_a_pwm.start(0)
           RPi::GPIO.setup(@pins[:in1], as: :output)
           RPi::GPIO.setup(@pins[:in2], as: :output)
+          RPi::GPIO.setup(@pins[:enable_b], as: :output)
           @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], 1000)
           @port_b_pwm.start(0)
           RPi::GPIO.setup(@pins[:in3], as: :output)
           RPi::GPIO.setup(@pins[:in4], as: :output)
         else
           if @pins[:enable_a]
+            RPi::GPIO.setup(@pins[:enable_a], as: :output)
             @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], 1000)
             @port_a_pwm.start(0)
             RPi::GPIO.setup(@pins[:in1], as: :output)
             RPi::GPIO.setup(@pins[:in2], as: :output)
           elsif @pins[:enable_b]
+            RPi::GPIO.setup(@pins[:enable_b], as: :output)
             @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], 1000)
             @port_b_pwm.start(0)
             RPi::GPIO.setup(@pins[:in3], as: :output)
@@ -77,11 +84,11 @@ module RoverProject
           RPi::GPIO.set_low(forward)
           RPi::GPIO.set_low(backward)
         when :forward
-          pwm.duty_cycle = motor.speed
+          pwm.duty_cycle = motor.pwm_speed
           RPi::GPIO.set_high(forward)
           RPi::GPIO.set_low(backward)
         when :backward
-          pwm.duty_cycle = motor.speed
+          pwm.duty_cycle = motor.pwm_speed
           RPi::GPIO.set_low(forward)
           RPi::GPIO.set_high(backward)
         end
