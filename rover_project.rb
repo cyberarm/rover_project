@@ -10,7 +10,7 @@ require "sinatra/base"
 require "sdl2"
 require "oj"
 
-if File.exist?("/proc/cpuinfo") && File.open("/proc/cpuinfo").read.scan(/armv7|BCM2835/)
+if File.exist?("/proc/cpuinfo") && File.open("/proc/cpuinfo").read.include?("BCM2835")
   log("BOOT", "Detected ARM arch, assuming running on a Pi.")
   require "rpi_gpio"
 else
