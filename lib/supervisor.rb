@@ -22,6 +22,15 @@ module RoverProject
 
       log("Supervisor", "Supervisor at your service")
       log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
+
+      at_exit do
+        unless ($!.success?)
+          if @active_program
+            @action_program.halt!
+          end
+        end
+      end
+
       run
     end
 
