@@ -29,6 +29,7 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(255)
     motor(:right_front_drive).set_power(255)
 
+    log("Autonomous", "Forward")
     delay(1)
 
     motor(:left_rear_drive).set_power(0)
@@ -37,14 +38,16 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(0)
     motor(:right_front_drive).set_power(0)
 
+    log("Autonomous", "Still")
     delay(1)
 
-    motor(:left_rear_drive).set_power(255)
-    motor(:right_rear_drive).set_power(255)
+    motor(:left_rear_drive).set_power(-255)
+    motor(:right_rear_drive).set_power(-255)
 
-    motor(:left_front_drive).set_power(255)
-    motor(:right_front_drive).set_power(255)
+    motor(:left_front_drive).set_power(-255)
+    motor(:right_front_drive).set_power(-255)
 
+    log("Autonomous", "Reverse")
     delay(1)
 
     motor(:left_rear_drive).set_power(0)
@@ -52,6 +55,9 @@ class Autonomous < TeleOp
 
     motor(:left_front_drive).set_power(0)
     motor(:right_front_drive).set_power(0)
+
+    log("Autonomous", "Still")
+    delay(1)
   end
 
   def stop

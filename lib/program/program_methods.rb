@@ -20,7 +20,7 @@ module RoverProject
       start_time = Time.now
       @hardware_interface.update_controllers
       @hardware_interface.reset_buttons
-      while Time.now-start_time >= seconds
+      until Time.now-start_time >= seconds
       end
     end
   end
