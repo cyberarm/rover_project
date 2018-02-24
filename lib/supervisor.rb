@@ -92,6 +92,7 @@ module RoverProject
 
       if @active_program && @active_program.is_a?(Program)
         @active_program.stop
+        @action_program.running = false
         @active_program.halt!
         log("Supervisor", "Stopped #{@active_program.class}.")
       end
