@@ -32,7 +32,7 @@ module RoverProject
 
     def halt!
       @hardware_interface.teardown
-      RPi::GPIO.reset
+      # RPi::GPIO.reset
     end
 
     def gamepad_event(sdl_event)

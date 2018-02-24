@@ -15,7 +15,7 @@ module RoverProject
       def setup
         RPi::GPIO.set_numbering(:board)
         #log("L298N", "Cleaning up GPIO...")
-        RPi::GPIO.clean_up
+        #RPi::GPIO.clean_up
         #log("L298N", "GPIO Ready.")
 
         if @motor_controller.motors.count == 2
