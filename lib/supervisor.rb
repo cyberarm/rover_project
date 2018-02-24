@@ -23,13 +23,13 @@ module RoverProject
       log("Supervisor", "Supervisor at your service")
       log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
 
-      at_exit do
-        if  $! && $!.is_a?(SystemExit)
-          if @active_program
-            @action_program.halt!
-          end
-        end
-      end
+      #at_exit do
+      #  if  $! && $!.is_a?(SystemExit)
+      #    if @active_program
+      #      @action_program.halt!
+      #    end
+      #  end
+      #end
 
       run
     end
