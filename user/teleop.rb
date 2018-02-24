@@ -21,7 +21,24 @@ class TeleOp < RoverProject::Program
   end
 end
 
-class YetAnotherProgram < TeleOp
+class Autonomous < TeleOp
+  def loop
+    motor(:left_rear_drive).set_power(255)
+    motor(:right_rear_drive).set_power(255)
+
+    motor(:left_front_drive).set_power(255)
+    motor(:right_front_drive).set_power(255)
+    sleep 1
+    motor(:left_rear_drive).set_power(255)
+    motor(:right_rear_drive).set_power(255)
+
+    motor(:left_front_drive).set_power(255)
+    motor(:right_front_drive).set_power(255)
+  end
+
+  def stop
+    log("Autonomous", "Shutdown.")
+  end
 end
 
 RoverProject::Supervisor.new("0.0.0.0", 4567)

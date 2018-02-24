@@ -58,12 +58,15 @@ module RoverProject
             set_pins(motor, :backward)
           end
         end
-        # log("MotorController[L298N]", "Updated!")
       end
 
       def teardown
         @port_a_pwm.stop if @port_a_pwm
         @port_b_pwm.stop if @port_b_pwm
+        RPi::GPIO.clean_up(@pins[:in1])
+        RPi::GPIO.clean_up(@pins[:in2])
+        RPi::GPIO.clean_up(@pins[:in3])
+        RPi::GPIO.clean_up(@pins[:in4])
       end
 
       def set_pins(motor, mode = :stop)
