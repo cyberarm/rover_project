@@ -15,5 +15,13 @@ module RoverProject
     def input(name)
       @hardware_interface.inputs[name]
     end
+
+    def delay(seconds)
+      start_time = Time.now
+      @hardware_interface.update_controllers
+      @hardware_interface.reset_buttons
+      while Time.now-start_time >= seconds
+      end
+    end
   end
 end

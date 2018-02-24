@@ -28,7 +28,25 @@ class Autonomous < TeleOp
 
     motor(:left_front_drive).set_power(255)
     motor(:right_front_drive).set_power(255)
-    sleep 1
+
+    delay(1)
+
+    motor(:left_rear_drive).set_power(0)
+    motor(:right_rear_drive).set_power(0)
+
+    motor(:left_front_drive).set_power(0)
+    motor(:right_front_drive).set_power(0)
+
+    delay(1)
+
+    motor(:left_rear_drive).set_power(255)
+    motor(:right_rear_drive).set_power(255)
+
+    motor(:left_front_drive).set_power(255)
+    motor(:right_front_drive).set_power(255)
+
+    delay(1)
+
     motor(:left_rear_drive).set_power(0)
     motor(:right_rear_drive).set_power(0)
 
