@@ -22,6 +22,7 @@ module RoverProject
       @hardware_interface.reset_buttons
       until Time.now-start_time >= seconds
       end
+      return unless @running
     end
   end
 end
