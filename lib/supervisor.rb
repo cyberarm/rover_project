@@ -67,7 +67,7 @@ module RoverProject
 
       log("Supervisor", "Starting main loop...")
       while(@run_supervisor)
-        if @active_program && @active_program.is_a?(Program)
+        if @active_program && @active_program.is_a?(Program) && @active_program.running?
           @active_program.loop
           @active_program.last_loop_time = (Time.now - @active_program.loop_time)
           @active_program.loop_time = Time.now

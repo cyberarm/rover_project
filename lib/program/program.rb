@@ -12,11 +12,12 @@ module RoverProject
     include ProgramMethods
 
     attr_reader :hardware_interface
-    attr_accessor :loop_time, :last_loop_time
+    attr_accessor :loop_time, :last_loop_time, :running
 
     def initialize
       @loop_time = Time.now
       @last_loop_time = 0
+      @running = true
       setup
       raise "No HardwareInterface!" unless @hardware_interface
     end
@@ -30,7 +31,12 @@ module RoverProject
     def stop
     end
 
+    def running?
+      @running
+    end
+
     def halt!
+      @running = false
       @hardware_interface.teardown
       # RPi::GPIO.reset
     end
