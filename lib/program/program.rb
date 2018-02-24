@@ -38,7 +38,6 @@ module RoverProject
     def halt!
       @running = false
       @hardware_interface.teardown
-      # RPi::GPIO.reset
     end
 
     def gamepad_event(sdl_event)
@@ -59,8 +58,8 @@ module RoverProject
       end
     end
 
-    def method_added(symbol)
-      raise "DO NOT OVERRIDE HALT!" if symbol == :halt! && self.methods.detect {|sym| if sym == :halt!; true; end}
+    def self.method_added(symbol)
+      raise "DO NOT OVERRIDE HALT!" if symbol == :halt!
       super
     end
   end

@@ -77,14 +77,21 @@ module RoverProject
       log("Supervisor", "Starting main loop...")
       while(@run_supervisor)
         if @active_program && @active_program.is_a?(Program) && @active_program.running?
-          @active_program.loop
-        end
-        # Program might be nullified while loop is running
-        if @active_program && @active_program.is_a?(Program) && @active_program.running?
-          @active_program.last_loop_time = (Time.now - @active_program.loop_time)
-          @active_program.loop_time = Time.now
-          @active_program.hardware_interface.update_controllers
-          @active_program.hardware_interface.reset_buttons
+          begin
+            catch(:ended_while_delayed) do
+              @active_program.loop
+              @active_program.last_loop_time = (Time.now - @active_program.loop_time)
+              @active_program.loop_time = Time.now
+              @active_program.hardware_interface.update_controllers
+              @active_program.hardware_interface.reset_buttons
+            end
+          rescue => e
+            log("Supervisor", "=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
+            log("Supervisor", "An error occurred, program will be halted!".upcase)
+            log("Supervisor", e)
+            log("Supervisor", "=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
+            @active_program.halt! if @active_program && @active_program.is_a?(Program)
+          end
         end
 
         sleep 0.01 # sleep for 10 millisecond to let OS do stuff.
@@ -92,12 +99,10 @@ module RoverProject
 
       if @active_program && @active_program.is_a?(Program)
         @active_program.stop
-        @action_program.running = false
         @active_program.halt!
         log("Supervisor", "Stopped #{@active_program.class}.")
       end
       ProgramServer.instance.shutdown
-      while (EM.reactor_running?); end
       log("Supervisor", "Exiting...")
     end
 

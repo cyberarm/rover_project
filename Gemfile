@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "sinatra"
 gem "sass"
 gem "slim"
-gem "thin"
+gem "puma"
 
 gem "oj"
 

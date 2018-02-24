@@ -2,6 +2,7 @@ module RoverProject
   class ProgramServer < Sinatra::Base
     set :bind, Proc.new{Supervisor.instance.host}
     set :port, Proc.new{Supervisor.instance.port}
+    set :server, :puma
     connections = []
 
     def self.instance
@@ -17,7 +18,6 @@ module RoverProject
     end
 
     def shutdown
-      EM.stop if EM.reactor_running?
     end
 
     get "/" do
@@ -38,16 +38,8 @@ module RoverProject
       204
     end
 
-    get "/telemetry", provides: "text/event-stream" do
-      stream(:keep_alive) do |out|
-        log("ProgramServer", "Streaming client connected...")
-        EM::add_periodic_timer(0.1) do
-          out << "data: #{Oj.dump(Supervisor.instance.telemetry, mode: :strict)}\n\n"
-        end
-        out.callback do
-          log("ProgramServer", "Streaming client disconnected.")
-        end
-      end
+    get "/telemetry" do
+      "#{Oj.dump(Supervisor.instance.telemetry, mode: :strict)}"
     end
 
     get "/css/application.css" do

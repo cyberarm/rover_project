@@ -20,9 +20,10 @@ module RoverProject
       start_time = Time.now
       @hardware_interface.update_controllers
       @hardware_interface.reset_buttons
-      until Time.now-start_time >= seconds
+      until Time.now-start_time >= seconds || !@running
+        sleep 0.01
       end
-      return unless @running
+      throw(:ended_while_delayed) unless @running
     end
   end
 end
