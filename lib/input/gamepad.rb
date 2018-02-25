@@ -19,7 +19,7 @@ module RoverProject
         @ready = false
 
         if SDL2::Joystick.num_connected_joysticks == 0
-          log(No controller detected!")
+          log("No controller detected!")
         else
           setup
         end
@@ -32,7 +32,7 @@ module RoverProject
             @guid = joystick.GUID
             @device_index = i
             @event_index  = joystick.index
-            log(Joystick/Gamepad GUID: #{joystick.GUID}")
+            log("Joystick/Gamepad GUID: #{joystick.GUID}")
           joystick.close
         end
         # Mappings from https://github.com/gabomdq/SDL_GameControllerDB/blob/master/data/SDL_gamecontrollerdb2.0.4.h

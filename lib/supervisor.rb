@@ -110,9 +110,14 @@ module RoverProject
 
     def set_program(klass)
       stop_program
+      valid_program = false
 
       begin
-        raise NameError unless Program.list.detect {|program| if program.to_s == klass.to_s; true; end}
+        log("Check #{klass} against #{Program.list}")
+        Program.list.detect do |program|
+          log("Found: #{program}") if program.to_s == klass.to_s
+        end
+        raise NameError unless valid_program
         @active_program = Object.const_get(klass).new
         log("Started #{@active_program.class}.")
       rescue NameError
