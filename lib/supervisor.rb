@@ -139,9 +139,9 @@ module RoverProject
           the_telemetry << "<br />"
           the_telemetry << "<br />"
         end
-        {active_program: @active_program.class.to_s, telemetry: "#{the_telemetry}"}
+        {active_program: @active_program.class.to_s, telemetry: "#{the_telemetry}", programs: Program.list.join(" ").split(" ")}
       else
-        {active_program: false, telemetry: ""}
+        {active_program: false, telemetry: "", programs: Program.list.join(" ").split(" ")}
       end
     end
   end

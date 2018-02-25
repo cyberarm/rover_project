@@ -11,14 +11,12 @@ html
           h1 Rover Project
           h2 Program
           select#program
-            - RoverProject::Program.list.each do |program|
-              option value="#{program}" #{program}
           br
           br
           .action_button
-            h1#action_button_text Start
+            h1#action_button_text Wait
     .container
       center
         h1 Telemetry
       .centered_box
-        h3#telemetry No data.<br/>more text thats wide<br/> text thats small
+        h3#telemetry No server connection if you're seeing this, JavaScript enabled?
