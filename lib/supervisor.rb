@@ -1,5 +1,6 @@
 module RoverProject
   class Supervisor
+    include Logger
     def self.instance
       @instance if @instance
     end
@@ -9,7 +10,7 @@ module RoverProject
     end
 
     attr_accessor :active_program
-    attr_reader :sdl_window, :host, :port
+    attr_reader :sdl_window, :host, :port, :log_color
 
     def initialize(host, port)
       Supervisor.instance = self
@@ -18,10 +19,11 @@ module RoverProject
       @active_program = nil
       @run_supervisor = true
       @sdl_window = nil
+      @log_color = :cyan
       SDL2.init(SDL2::INIT_GAMECONTROLLER|SDL2::INIT_EVENTS)
 
-      log("Supervisor", "Supervisor at your service")
-      log("Supervisor", "Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
+      log("Supervisor at your service")
+      log("Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
 
       #at_exit do
       #  if  $! && $!.is_a?(SystemExit)
@@ -35,14 +37,14 @@ module RoverProject
     end
 
     def run
-      log("Supervisor", "Starting ProgramServer...")
+      log("Starting ProgramServer...")
       Thread.new do
         ProgramServer.run!
-        log("Supervisor", "ProgramServer stopped.")
+        log("ProgramServer stopped.")
         @run_supervisor = false
       end
 
-      #log("Supervisor", "Creating SDL window for input reasons...")
+      #log("Creating SDL window for input reasons...")
       #@sdl_window = SDL2::Window.create("RoverProject", SDL2::Window::POS_CENTERED,SDL2::Window::POS_CENTERED,100,100, 0)
       #@sdl_window.raise
 
@@ -51,7 +53,7 @@ module RoverProject
           while(event = SDL2::Event.poll)
             case event
             when SDL2::Event::Quit
-              log("Supervisor", "SDL received quit event, closing up shop...")
+              log("SDL received quit event, closing up shop...")
               @run_supervisor = false
               break
             when SDL2::Event::ControllerAxisMotion, SDL2::Event::ControllerButton, SDL2::Event::JoyDeviceAdded, SDL2::Event::JoyDeviceRemoved, SDL2::Event::ControllerDeviceAdded, SDL2::Event::ControllerDeviceRemoved
@@ -65,7 +67,7 @@ module RoverProject
             end
           end
           #if @sdl_window.destroy?
-          #  log("Supervisor", "Lost SDL window!")
+          #  log("Lost SDL window!")
           #  @run_supervisor = false
           #end
 
@@ -74,7 +76,7 @@ module RoverProject
         end
       end
 
-      log("Supervisor", "Starting main loop...")
+      log("Starting main loop...")
       while(@run_supervisor)
         if @active_program && @active_program.is_a?(Program) && @active_program.running?
           begin
@@ -86,10 +88,10 @@ module RoverProject
               @active_program.hardware_interface.reset_buttons
             end
           rescue => e
-            log("Supervisor", "=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
-            log("Supervisor", "An error occurred, program will be halted!".upcase)
-            log("Supervisor", e)
-            log("Supervisor", "=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
+            log("=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
+            log("An error occurred, program will be halted!".upcase)
+            log(e)
+            log("=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=!=")
             @active_program.halt! if @active_program && @active_program.is_a?(Program)
           end
         end
@@ -100,10 +102,10 @@ module RoverProject
       if @active_program && @active_program.is_a?(Program)
         @active_program.stop
         @active_program.halt!
-        log("Supervisor", "Stopped #{@active_program.class}.")
+        log("Stopped #{@active_program.class}.")
       end
       ProgramServer.instance.shutdown
-      log("Supervisor", "Exiting...")
+      log("Exiting...")
     end
 
     def set_program(klass)
@@ -112,18 +114,18 @@ module RoverProject
       begin
         raise NameError unless Program.list.detect {|program| if program.to_s == klass.to_s; true; end}
         @active_program = Object.const_get(klass).new
-        log("Supervisor", "Started #{@active_program.class}.")
+        log("Started #{@active_program.class}.")
       rescue NameError
-        log("Supervisor", "'#{klass}' is not a known program.")
+        log("'#{klass}' is not a known program.")
       end
     end
 
     def stop_program
       if @active_program && @active_program.is_a?(Program)
-        log("Supervisor", "Stopping #{@active_program.class}...")
+        log("Stopping #{@active_program.class}...")
         @active_program.stop
         @active_program.halt!
-        log("Supervisor", "Stopped #{@active_program.class}.")
+        log("Stopped #{@active_program.class}.")
         @active_program = nil
       end
     end

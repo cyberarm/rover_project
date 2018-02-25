@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    colorize (0.8.1)
     ffi (1.9.22)
     mustermann (1.0.2)
     oj (3.4.0)
@@ -33,6 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   oj
   puma
   rpi_gpio

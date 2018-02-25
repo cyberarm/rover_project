@@ -1,5 +1,6 @@
 module RoverProject
   class HardwareInterface
+    include Logger
 
     attr_reader :motor_controllers, :motors, :inputs
     def initialize

@@ -2,19 +2,29 @@ if RUBY_ENGINE == "ruby" && RUBY_VERSION < "2.1.0"
   raise "Please use a newer ruby version that supports named arguments. Ruby 2.1.0+"
 end
 
-def log(tag, string)
-  puts "[#{Time.now.strftime('%X')}][#{tag}] #{string}"
-end
 
 require "sinatra/base"
+require "colorize"
 require "sdl2"
 require "oj"
 
+module RoverProject
+  module Logger
+    def log(string)
+      if defined?(self.log_color)
+        puts "#{Time.now.strftime('%X')}]"+"[#{self.class.to_s.split('::').last}]".send(self.log_color)+" #{string}"
+      else
+        puts "#{Time.now.strftime('%X')}]"+"[#{self.class.to_s.split('::').last}]"+" #{string}"
+      end
+    end
+  end
+end
+
 if File.exist?("/proc/cpuinfo") && File.open("/proc/cpuinfo").read.include?("BCM2835")
-  log("BOOT", "Detected ARM arch, assuming running on a Pi.")
+  puts("[#{Time.now.strftime('%X')}]"+"[BOOT]".red+"Detected ARM arch, assuming running on a Pi.")
   require "rpi_gpio"
 else
-  log("BOOT", "Did not detect ARM arch, using virtual gpio for testing.")
+  puts("[#{Time.now.strftime('%X')}]"+"[BOOT]".red+"Did not detect ARM arch, using virtual gpio for testing.")
   require_relative "lib/gpio"
 end
 

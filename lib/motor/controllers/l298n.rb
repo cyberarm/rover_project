@@ -1,6 +1,7 @@
 module RoverProject
   class MotorController
     class L298N
+      include Logger
 
       attr_reader :max_motors, :max_pins, :motor_controller
       def initialize(motor_controller)
@@ -14,9 +15,9 @@ module RoverProject
 
       def setup
         RPi::GPIO.set_numbering(:board)
-        #log("L298N", "Cleaning up GPIO...")
+        #log("Cleaning up GPIO...")
         #RPi::GPIO.clean_up
-        #log("L298N", "GPIO Ready.")
+        #log("GPIO Ready.")
 
         if @motor_controller.motors.count == 2
 		  RPi::GPIO.setup(@pins[:enable_a], as: :output)
@@ -95,7 +96,7 @@ module RoverProject
           RPi::GPIO.set_low(forward)
           RPi::GPIO.set_high(backward)
         end
-        # log("MotorController[L298N]", "Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
+        # log("Motor #{motor.port}: POWER: #{motor.power}, PWM: #{pwm.duty_cycle}, forward: #{RPi::GPIO.high?(forward)}, backward: #{RPi::GPIO.high?(backward)}")
       end
     end
   end

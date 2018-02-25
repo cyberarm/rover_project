@@ -17,7 +17,7 @@ class TeleOp < RoverProject::Program
   end
 
   def stop
-    log("TeleOp", "Shutdown.")
+    log("Shutdown.")
   end
 end
 
@@ -29,7 +29,7 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(255)
     motor(:right_front_drive).set_power(255)
 
-    log("Autonomous", "Forward")
+    log("Forward")
     delay(1)
 
     motor(:left_rear_drive).set_power(0)
@@ -38,7 +38,7 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(0)
     motor(:right_front_drive).set_power(0)
 
-    log("Autonomous", "Still")
+    log("Still")
     delay(1)
 
     motor(:left_rear_drive).set_power(-255)
@@ -47,7 +47,7 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(-255)
     motor(:right_front_drive).set_power(-255)
 
-    log("Autonomous", "Reverse")
+    log("Reverse")
     delay(1)
 
     motor(:left_rear_drive).set_power(0)
@@ -56,12 +56,12 @@ class Autonomous < TeleOp
     motor(:left_front_drive).set_power(0)
     motor(:right_front_drive).set_power(0)
 
-    log("Autonomous", "Still")
+    log("Still")
     delay(1)
   end
 
   def stop
-    log("Autonomous", "Shutdown.")
+    log("Shutdown.")
   end
 end
 

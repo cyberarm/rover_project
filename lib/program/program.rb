@@ -1,5 +1,6 @@
 module RoverProject
   class Program
+    include Logger
     PROGRAMS = []
     def self.inherited(klass)
       PROGRAMS << klass

@@ -1,5 +1,6 @@
 module RoverProject
   class ProgramServer < Sinatra::Base
+    include Logger
     set :bind, Proc.new{Supervisor.instance.host}
     set :port, Proc.new{Supervisor.instance.port}
     set :server, :puma
@@ -26,13 +27,13 @@ module RoverProject
 
     post "/program" do
       if params[:program]
-        log("ProgramServer", "Asking Supervisor to start '#{params[:program]}'...")
+        log("Asking Supervisor to start '#{params[:program]}'...")
         Supervisor.instance.set_program(params[:program])
       elsif params[:stop]
-        log("ProgramServer", "Asking Supervisor to stop '#{Supervisor.instance.active_program.class}'...")
+        log("Asking Supervisor to stop '#{Supervisor.instance.active_program.class}'...")
         Supervisor.instance.stop_program
       else
-        log("ProgramServer", "Bad request.")
+        log("Bad request.")
       end
 
       204
