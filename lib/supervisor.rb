@@ -113,15 +113,16 @@ module RoverProject
       valid_program = false
 
       begin
-        log("Check #{klass} against #{Program.list}")
         Program.list.detect do |program|
-          log("Found: #{program}") if program.to_s == klass.to_s
+          valid_program = true
+          break
         end
         raise NameError unless valid_program
         @active_program = Object.const_get(klass).new
         log("Started #{@active_program.class}.")
       rescue NameError
-        log("'#{klass}' is not a known program.")
+        log("'#{klass}' is KNOWN blame Object.const_get") if valid_program
+        log("'#{klass}' is not a known program.") unless valid_program
       end
     end
 

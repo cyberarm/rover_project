@@ -4,7 +4,7 @@ module RoverProject
     set :bind, Proc.new{Supervisor.instance.host}
     set :port, Proc.new{Supervisor.instance.port}
     set :server, :puma
-    set :raise_errors, true
+    # set :raise_errors, true
     connections = []
 
     def self.instance
