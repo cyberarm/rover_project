@@ -10,11 +10,25 @@ class TeleOp < RoverProject::Program
 
   def loop
     if input(:gamepad) && input(:gamepad).ready
-      motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
-      motor(:right_rear_drive).set_power(input(:gamepad).right_stick_y)
+      if input(:gamepad).right_bumper
+        motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
+        motor(:right_rear_drive).set_power(-input(:gamepad).right_stick_y)
 
-      motor(:left_front_drive).set_power(input(:gamepad).left_stick_y)
-      motor(:right_front_drive).set_power(input(:gamepad).right_stick_y)
+        motor(:left_front_drive).set_power(-input(:gamepad).left_stick_y)
+        motor(:right_front_drive).set_power(input(:gamepad).right_stick_y)
+      elsif input(:gamepad).left_bumper
+        motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
+        motor(:right_rear_drive).set_power(input(:gamepad).left_stick_y)
+
+        motor(:left_front_drive).set_power(input(:gamepad).right_stick_y)
+        motor(:right_front_drive).set_power(input(:gamepad).right_stick_y)
+      else
+        motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
+        motor(:right_rear_drive).set_power(input(:gamepad).right_stick_y)
+
+        motor(:left_front_drive).set_power(input(:gamepad).left_stick_y)
+        motor(:right_front_drive).set_power(input(:gamepad).right_stick_y)
+      end
     end
   end
 
