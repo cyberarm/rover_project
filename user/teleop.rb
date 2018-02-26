@@ -4,6 +4,8 @@ require_relative "../user/virtual_hardware_interface"
 class TeleOp < RoverProject::Program
   def setup
     use(VirtualHardwareInterface)
+    # sound("/home/cyberarm/Downloads/25032__sirplus__extreme-alarm.wav")
+    speak "Setup Completed."
   end
 
   def loop

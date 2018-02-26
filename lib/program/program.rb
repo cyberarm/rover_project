@@ -19,6 +19,7 @@ module RoverProject
       @loop_time = Time.now
       @last_loop_time = 0
       @running = true
+      @audio = Audio.new
       setup
       raise "No HardwareInterface!" unless @hardware_interface
     end
@@ -38,6 +39,7 @@ module RoverProject
 
     def halt!
       @running = false
+      @audio.teardown
       @hardware_interface.teardown
     end
 

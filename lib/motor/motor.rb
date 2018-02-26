@@ -2,7 +2,8 @@ module RoverProject
   class Motor
     ZERO_FUZZ = 8 # Motors might not move at a power less than this so act like its zero
 
-    attr_reader :name, :port, :power, :direction
+    attr_reader :port, :power
+    attr_writer :name, :direction
     alias :speed :power
     def initialize(initial_name, port, initial_power = 0, initial_direction = :forward)
       set_name(initial_name)
@@ -24,10 +25,10 @@ module RoverProject
     def power
       @power
     end
-    
+
     def pwm_speed
-	  ((@power/255.0)*100.0).abs
-	end
+      ((@power/255.0)*100.0).abs
+    end
 
     # A power is a integer between -255 to +255
     def set_power(integer)

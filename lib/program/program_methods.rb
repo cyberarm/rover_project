@@ -25,5 +25,17 @@ module RoverProject
       end
       throw(:ended_while_delayed) unless @running
     end
+
+    def sound(sound_path, loops = 0)
+      @audio.play_sound(sound_path, loops)
+    end
+
+    def music(music_path, loops = 0)
+      @audio.play_music(music_path, loops)
+    end
+
+    def speak(text, cmd = "espeak -ven+f3 -k5 -s150")
+      Process.spawn("#{cmd} \"#{text}\"")
+    end
   end
 end

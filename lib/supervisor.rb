@@ -13,6 +13,8 @@ module RoverProject
     attr_reader :sdl_window, :host, :port, :log_color
 
     def initialize(host, port)
+      SDL2.init(SDL2::INIT_GAMECONTROLLER|SDL2::INIT_EVENTS|SDL2::INIT_AUDIO)
+
       Supervisor.instance = self
       @host = host
       @port = port
@@ -20,18 +22,9 @@ module RoverProject
       @run_supervisor = true
       @sdl_window = nil
       @log_color = :cyan
-      SDL2.init(SDL2::INIT_GAMECONTROLLER|SDL2::INIT_EVENTS)
 
       log("Supervisor at your service")
       log("Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
-
-      #at_exit do
-      #  if  $! && $!.is_a?(SystemExit)
-      #    if @active_program
-      #      @action_program.halt!
-      #    end
-      #  end
-      #end
 
       run
     end
@@ -140,9 +133,9 @@ module RoverProject
       if @active_program
         the_telemetry = ""
         @active_program.hardware_interface.motor_controllers.each do |k, mc|
-          the_telemetry << "Motor Controller #{mc.type}<br />"
+          the_telemetry << "<b>#{mc.name}</b> Motor Controller (#{mc.type})<br />"
           mc.motors.each do |motor|
-            the_telemetry << "#{motor.name} motor, power: #{motor.power}, direction: #{motor.direction}<br />"
+            the_telemetry << "<b>#{motor.name}</b> Motor: power: #{motor.power}, direction: #{motor.direction}<br />"
           end
           the_telemetry << "<br />"
           the_telemetry << "<br />"

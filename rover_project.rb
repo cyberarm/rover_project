@@ -29,6 +29,7 @@ else
 end
 
 require_relative "lib/errors"
+require_relative "lib/audio/audio"
 require_relative "lib/supervisor"
 require_relative "lib/program/program_methods"
 require_relative "lib/program/program"

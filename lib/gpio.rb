@@ -53,7 +53,7 @@ class RPi
       end
 
       def start(cycle)
-        duty_cycle=(cycle)
+        self.duty_cycle=(cycle)
       end
 
       def gpio
