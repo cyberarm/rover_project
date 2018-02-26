@@ -35,7 +35,9 @@ module RoverProject
     end
 
     def speak(text, cmd = "espeak -ven+f3 -k5 -s150")
-      Process.spawn("#{cmd} \"#{text}\"")
+      Thread.new do
+        system("#{cmd} \"#{text}\"")
+      end
     end
   end
 end
