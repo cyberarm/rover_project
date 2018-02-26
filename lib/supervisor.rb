@@ -1,6 +1,11 @@
 module RoverProject
   class Supervisor
     include Logger
+    BEEP_ERROR = 4_000
+    BEEP_BOOT  = 840
+    BEEP_START = 562
+    BEEP_STOP  = 672
+    BEEP_SHUTDOWN = 440
     def self.instance
       @instance if @instance
     end
@@ -26,6 +31,8 @@ module RoverProject
       log("Supervisor at your service")
       log("Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
 
+      beep(BEEP_BOOT, 250)
+
       run
     end
 
@@ -36,10 +43,6 @@ module RoverProject
         log("ProgramServer stopped.")
         @run_supervisor = false
       end
-
-      #log("Creating SDL window for input reasons...")
-      #@sdl_window = SDL2::Window.create("RoverProject", SDL2::Window::POS_CENTERED,SDL2::Window::POS_CENTERED,100,100, 0)
-      #@sdl_window.raise
 
       Thread.new do
         while(@run_supervisor)
@@ -59,12 +62,6 @@ module RoverProject
               # p event.inspect
             end
           end
-          #if @sdl_window.destroy?
-          #  log("Lost SDL window!")
-          #  @run_supervisor = false
-          #end
-
-          #@sdl_window.show
           sleep 0.005
         end
       end
@@ -99,6 +96,7 @@ module RoverProject
       end
       ProgramServer.instance.shutdown
       log("Exiting...")
+      beep(BEEP_SHUTDOWN, 500)
     end
 
     def set_program(klass)
@@ -113,9 +111,11 @@ module RoverProject
         raise NameError unless valid_program
         @active_program = Object.const_get(klass).new
         log("Started #{@active_program.class}.")
+        beep(BEEP_START, 200)
       rescue NameError
         log("'#{klass}' is KNOWN blame Object.const_get") if valid_program
         log("'#{klass}' is not a known program.") unless valid_program
+        beep(BEEP_ERROR, 500)
       end
     end
 
@@ -125,7 +125,20 @@ module RoverProject
         @active_program.stop
         @active_program.halt!
         log("Stopped #{@active_program.class}.")
+        beep(BEEP_STOP, 250)
         @active_program = nil
+      end
+    end
+
+    def beep(freq, duration, blocking = false)
+      raise "Freq must be an integer!" unless freq.is_a?(Integer)
+      raise "Duration must be a number!" unless duration.is_a?(Integer) || duration.is_a?(Float)
+      if system("which speaker-test")
+        if blocking
+          system("( speaker-test -t sine -f #{freq} )& pid=$! ; sleep #{duration.to_f/1000}s ; kill -9 $pid")
+        else
+          Process.spawn("( speaker-test -t sine -f #{freq} )& pid=$! ; sleep #{duration.to_f/1000}s ; kill -9 $pid")
+        end
       end
     end
 

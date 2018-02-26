@@ -39,5 +39,9 @@ module RoverProject
         system("#{cmd} \"#{text}\"")
       end
     end
+
+    def beep(freq, duration)
+      Supervisor.instance.beep(freq, duration)
+    end
   end
 end
