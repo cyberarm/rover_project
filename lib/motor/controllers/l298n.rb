@@ -11,6 +11,7 @@ module RoverProject
         @port_a = 0
         @port_b = 1
         @pins = @motor_controller.pins
+	@pwm_freq = 100
       end
 
       def setup
@@ -21,25 +22,25 @@ module RoverProject
 
         if @motor_controller.motors.count == 2
 		  RPi::GPIO.setup(@pins[:enable_a], as: :output)
-          @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], 1000)
+          @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], @pwm_freq)
           @port_a_pwm.start(0)
           RPi::GPIO.setup(@pins[:in1], as: :output)
           RPi::GPIO.setup(@pins[:in2], as: :output)
           RPi::GPIO.setup(@pins[:enable_b], as: :output)
-          @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], 1000)
+          @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], @pwm_freq)
           @port_b_pwm.start(0)
           RPi::GPIO.setup(@pins[:in3], as: :output)
           RPi::GPIO.setup(@pins[:in4], as: :output)
         else
           if @pins[:enable_a]
             RPi::GPIO.setup(@pins[:enable_a], as: :output)
-            @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], 1000)
+            @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], @pwm_freq)
             @port_a_pwm.start(0)
             RPi::GPIO.setup(@pins[:in1], as: :output)
             RPi::GPIO.setup(@pins[:in2], as: :output)
           elsif @pins[:enable_b]
             RPi::GPIO.setup(@pins[:enable_b], as: :output)
-            @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], 1000)
+            @port_b_pwm = RPi::GPIO::PWM.new(@pins[:enable_b], @pwm_freq)
             @port_b_pwm.start(0)
             RPi::GPIO.setup(@pins[:in3], as: :output)
             RPi::GPIO.setup(@pins[:in4], as: :output)
