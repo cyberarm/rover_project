@@ -12,9 +12,9 @@ class TeleOp < RoverProject::Program
     if input(:gamepad) && input(:gamepad).ready
       if input(:gamepad).right_bumper
         motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
-        motor(:right_front_drive).set_power(-input(:gamepad).left_stick_y)
+        motor(:right_front_drive).set_power(input(:gamepad).left_stick_y)
 
-        motor(:right_rear_drive).set_power(-input(:gamepad).right_stick_y)
+        motor(:right_rear_drive).set_power(input(:gamepad).right_stick_y)
         motor(:left_front_drive).set_power(input(:gamepad).right_stick_y)
       elsif input(:gamepad).left_bumper
         motor(:left_rear_drive).set_power(input(:gamepad).left_stick_y)
