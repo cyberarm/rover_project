@@ -5,6 +5,11 @@ module RoverProject
     attr_reader :port, :power
     attr_writer :name, :direction
     alias :speed :power
+
+    # @param initial_name [Symbol] lookup name of {MotorController}
+    # @param port [Symbol|Integer] which port the motor in
+    # @param initial_power [Integer|Float] initial power of motor
+    # @param initial_direction [Symbol] direction of motor (:forward or :backward)
     def initialize(initial_name, port, initial_power = 0, initial_direction = :forward)
       set_name(initial_name)
       @port = port
@@ -13,10 +18,14 @@ module RoverProject
       set_direction(initial_direction)
     end
 
+    # Returns name
+    # @return [Symbol]
     def name
       @name
     end
 
+    # Sets the name of the {MotorController}
+    # @param symbol [Symbol] name of motor controller
     def set_name(symbol)
       raise "Name must be a symbol" unless symbol.is_a?(Symbol)
       @name = symbol
@@ -26,6 +35,8 @@ module RoverProject
       @power
     end
 
+    # Returns a Pi PWM safe duty cycle
+    # @return [Integer] returns a number between 0 to 100
     def pwm_speed
       ((@power/255.0)*100.0).abs
     end
@@ -37,6 +48,7 @@ module RoverProject
     end
 
     # returns relative direction for motor given @direction and @power
+    # @return [Symbol] relative direction
     def direction
       if @direction == :forward
         if @power <= 0
