@@ -130,6 +130,7 @@ module RoverProject
       end
     end
 
+    # Beeps
     def beep(freq, duration, blocking = false)
       raise "Freq must be an integer!" unless freq.is_a?(Integer)
       raise "Duration must be a number!" unless duration.is_a?(Integer) || duration.is_a?(Float)
@@ -142,6 +143,8 @@ module RoverProject
       end
     end
 
+    # Output the robots telemetry
+    # @return [String] Telemetry
     def telemetry
       if @active_program
         the_telemetry = ""

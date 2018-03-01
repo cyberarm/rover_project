@@ -6,9 +6,13 @@ module RoverProject
     set :server, :puma
     set :raise_errors, true
 
+    # @return [ProgramServer] current {instance} of program server
     def self.instance
       @instance
     end
+
+    # Sets {instance} of {ProgramServer}
+    # @param klass [ProgramServer] current {instance} of program server
     def self.instance=(klass)
       @instance = klass
     end
@@ -18,6 +22,9 @@ module RoverProject
       super
     end
 
+    # Called when supervisor shuts down
+    #
+    # Hold over from Thin/Server Sent Events
     def shutdown
     end
 

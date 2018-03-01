@@ -10,6 +10,8 @@ module RoverProject
       @fade_ms = 100
     end
 
+    # Returns first available channel or nil if none are available
+    # @return [Integer|nil] channel
     def available_channel
       num = nil
       @channels.each_with_index do |channel, index|
@@ -21,6 +23,9 @@ module RoverProject
       return num
     end
 
+    # Plays sound if there is an available_channel
+    # @param sound_path [String] File path to sound
+    # @param loops [Integer] number of times to loop sound
     def play_sound(sound_path, loops = 0)
       if File.exist?(sound_path)
         sample = SDL2::Mixer::Chunk.load(sound_path)
@@ -37,6 +42,9 @@ module RoverProject
       end
     end
 
+    # Plays music, stops currently playing music
+    # @param sound_path [String] File path to music
+    # @param loops [Integer] number of times to loop music
     def play_music(sound_path, loops = 0)
       if File.exist?(sound_path)
         song  = SDL2::Mixer::Music.load(sound_path)
@@ -47,6 +55,7 @@ module RoverProject
       end
     end
 
+    # Stops all playing sounds and music
     def stop_audio
       @music.each do |music|
         music.fade_out(@fade_ms)
@@ -59,6 +68,7 @@ module RoverProject
       end
     end
 
+    # Cleans up {Audio} instance
     def teardown
       stop_audio
       SDL2::Mixer.close

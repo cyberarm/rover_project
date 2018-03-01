@@ -11,17 +11,15 @@ module RoverProject
         @port_a = 0
         @port_b = 1
         @pins = @motor_controller.pins
-	@pwm_freq = 100
+        @pwm_freq = 100
       end
 
+      # Sets up motor controller by setting GPIO pins
       def setup
         RPi::GPIO.set_numbering(:board)
-        #log("Cleaning up GPIO...")
-        #RPi::GPIO.clean_up
-        #log("GPIO Ready.")
 
         if @motor_controller.motors.count == 2
-		  RPi::GPIO.setup(@pins[:enable_a], as: :output)
+          RPi::GPIO.setup(@pins[:enable_a], as: :output)
           @port_a_pwm = RPi::GPIO::PWM.new(@pins[:enable_a], @pwm_freq)
           @port_a_pwm.start(0)
           RPi::GPIO.setup(@pins[:in1], as: :output)
@@ -50,6 +48,7 @@ module RoverProject
         end
       end
 
+      # Updates motors
       def update
         @motor_controller.motors.each do |motor|
           if motor.speed.between?(-Motor::ZERO_FUZZ, Motor::ZERO_FUZZ)
@@ -62,6 +61,7 @@ module RoverProject
         end
       end
 
+      # Stops motors are cleans up pins
       def teardown
         @port_a_pwm.stop if @port_a_pwm
         @port_b_pwm.stop if @port_b_pwm
@@ -71,6 +71,9 @@ module RoverProject
         RPi::GPIO.clean_up(@pins[:in4])
       end
 
+      # Sets the pins for the motor controller
+      # @param motor [Motor]
+      # @param mode [Symbol]
       def set_pins(motor, mode = :stop)
         pwm, forward, backward = nil, nil, nil
         if motor.port == :a

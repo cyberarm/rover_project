@@ -11,18 +11,23 @@ module RoverProject
       @motors = []
     end
 
+    # Calls setup on the actual motor controller
     def setup
       @controller.setup
     end
 
+    # Calls update on the actual motor controller
     def update
       @controller.update
     end
 
+    # Calls teardown on the actual motor controller
     def teardown
       @controller.teardown
     end
 
+    # Adds motor to controller
+    # @param motor [Motor] Instance of motor
     def add_motor(motor)
       if @motors.count >= @controller.max_motors
         raise "To many motors for controller '#{@name}' (#{@type.to_s.upcase})"

@@ -6,6 +6,7 @@ module RoverProject
       PROGRAMS << klass
     end
 
+    # List of programs
     def self.list
       PROGRAMS
     end
@@ -24,37 +25,50 @@ module RoverProject
       raise "No HardwareInterface!" unless @hardware_interface
     end
 
+    # Setup for program, programs should implement this method instead of overriding {initialize}
     def setup
     end
 
+    # This runs the program
     def loop
     end
 
+    # This is called before halt! when a program stops
     def stop
     end
 
+    # Returns true of the program is running
     def running?
       @running
     end
 
+    # Called after stop when a program stops
+    #
+    # Don't override.
     def halt!
       @running = false
       @audio.teardown
       @hardware_interface.teardown
     end
 
+    # Forwards sdl events to {Input::GamePad} instances
+    # @param sdl_event [SDL2::Event]
     def gamepad_event(sdl_event)
       @hardware_interface.inputs.each do |k, klass|
         klass.event(sdl_event) if klass.is_a?(Input::GamePad)
       end
     end
 
+    # Forwards sdl events to {Input::Keyboard} instances
+    # @param sdl_event [SDL2::Event]
     def keyboard_event(sdl_event)
       @hardware_interface.inputs.each do |k, klass|
         klass.event(sdl_event) if klass.is_a?(Input::Keyboard)
       end
     end
 
+    # Forwards sdl events to {Input::Mouse} instances
+    # @param sdl_event [SDL2::Event]
     def mouse_event(sdl_event)
       @hardware_interface.inputs.each do |k, klass|
         klass.event(sdl_event) if klass.is_a?(Input::Mouse)
