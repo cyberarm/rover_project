@@ -15,7 +15,7 @@ module RoverProject
     end
 
     attr_accessor :active_program
-    attr_reader :sdl_window, :host, :port, :log_color
+    attr_reader :audio, :sdl_window, :host, :port, :log_color, :tmpfs
 
     def initialize(host, port)
       SDL2.init(SDL2::INIT_GAMECONTROLLER|SDL2::INIT_EVENTS|SDL2::INIT_AUDIO)
@@ -27,9 +27,21 @@ module RoverProject
       @run_supervisor = true
       @sdl_window = nil
       @log_color = :cyan
+      @audio = Audio.new
 
       log("Supervisor at your service")
       log("Using SDL2 version: #{SDL2::LIBSDL_VERSION}")
+
+      log("Mounting tmpfs for beeps and boops...")
+      log("Calling: 'sudo mount -t tmpfs -o size=64m tmpfs #{Dir.pwd}/data/tmp'")
+      success = system("sudo mount -t tmpfs -o size=64m tmpfs #{Dir.pwd}/data/tmp")
+      if success
+        log("Mounted.")
+        @tmpfs = true
+      else
+        log("Failed to mount!")
+        @tmpfs = false
+      end
 
       beep(BEEP_BOOT, 250)
 
@@ -97,6 +109,14 @@ module RoverProject
       ProgramServer.instance.shutdown
       log("Exiting...")
       beep(BEEP_SHUTDOWN, 500)
+      @audio.teardown
+      log("Unmounting tmpfs...")
+      success = system("sudo umount #{Dir.pwd}/data/tmp")
+      if success
+        log("Unmounted.")
+      else
+        log("Failed to unmount! Not mounted?")
+      end
     end
 
     def set_program(klass)
@@ -130,17 +150,15 @@ module RoverProject
       end
     end
 
-    # Beeps
-    def beep(freq, duration, blocking = false)
-      raise "Freq must be an integer!" unless freq.is_a?(Integer)
-      raise "Duration must be a number!" unless duration.is_a?(Integer) || duration.is_a?(Float)
-      if system("which speaker-test")
-        if blocking
-          system("( speaker-test -t sine -f #{freq} )& pid=$! ; sleep #{duration.to_f/1000}s ; kill -9 $pid")
-        else
-          Process.spawn("( speaker-test -t sine -f #{freq} )& pid=$! ; sleep #{duration.to_f/1000}s ; kill -9 $pid")
-        end
-      end
+    # Plays beep/tone
+    #
+    # Available types: :sine, :square, :saw, :triangle, and :noise
+    # @param freq [Integer] frequency of beep/tone
+    # @param duration [Integer] length of beep/tone in milliseconds
+    # @param type [Symbol] type of beep/tone
+    def beep(freq, duration, type = :sine)
+      tone = ToneGenerator.new(type: type, freq: freq, duration: duration/1000.0)
+      @audio.play_sound(tone.filename, 0)
     end
 
     # Output the robots telemetry

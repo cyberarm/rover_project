@@ -20,7 +20,7 @@ module RoverProject
       @loop_time = Time.now
       @last_loop_time = 0
       @running = true
-      @audio = Audio.new
+      @audio = Supervisor.instance.audio
       setup
       raise "No HardwareInterface!" unless @hardware_interface
     end
@@ -47,7 +47,7 @@ module RoverProject
     # Don't override.
     def halt!
       @running = false
-      @audio.teardown
+      @audio.stop_audio
       @hardware_interface.teardown
     end
 

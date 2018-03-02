@@ -23,11 +23,23 @@ module RoverProject
       return num
     end
 
+    # Releases channels that are not playing back into the available pool
+    def free_channels
+      @channels.each_with_index do |channel, index|
+        if channel
+          unless SDL2::Mixer::Channels.play?(index)
+            @channels[index] = false
+          end
+        end
+      end
+    end
+
     # Plays sound if there is an available_channel
     # @param sound_path [String] File path to sound
     # @param loops [Integer] number of times to loop sound
     def play_sound(sound_path, loops = 0)
       if File.exist?(sound_path)
+        free_channels
         sample = SDL2::Mixer::Chunk.load(sound_path)
         @sounds << sample
         channel = available_channel

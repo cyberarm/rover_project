@@ -5,6 +5,7 @@ end
 
 require "sinatra/base"
 require "colorize"
+require "wavefile"
 require "sdl2"
 require "oj"
 
@@ -29,6 +30,7 @@ else
 end
 
 require_relative "lib/errors"
+require_relative "lib/audio/tone_generator"
 require_relative "lib/audio/audio"
 require_relative "lib/supervisor"
 require_relative "lib/program/program_methods"
