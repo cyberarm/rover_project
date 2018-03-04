@@ -3,6 +3,7 @@ module RoverProject
   #
   # Using https://github.com/jstrait/nanosynth as reference/guide
   class ToneGenerator
+    CACHE = {}
     def initialize(type: :sine, freq:, duration:, amplitude: 1.0, sample_rate: 44100)
       @type = type
       @freq = freq
@@ -11,12 +12,37 @@ module RoverProject
       @sample_rate = sample_rate
       @filename = false
 
-      generate
+      generate unless in_cache?
       return self
+    end
+
+    def in_cache?
+      if CACHE[@type]
+        if CACHE[@type][@freq]
+          if CACHE[@type][@freq][@duration]
+            @filename = CACHE[@type][@freq][@duration]
+            return true
+          else
+            false
+          end
+        else
+          false
+        end
+      else
+        false
+      end
     end
 
     def filename
       @filename
+    end
+
+    def cache(filename)
+      CACHE[@type] = {} unless CACHE[@type]
+      CACHE[@type][@freq] = {} unless CACHE[@type][@freq]
+      CACHE[@type][@freq][@duration] = {} unless CACHE[@type][@freq][@duration]
+
+      CACHE[@type][@freq][@duration] = filename
     end
 
     def generate
@@ -53,6 +79,8 @@ module RoverProject
       WaveFile::Writer.new(@filename, WaveFile::Format.new(:mono, :pcm_16, @sample_rate)) do |writer|
         writer.write(buffer)
       end
+
+      cache(@filename)
     end
 
     def generate_filename
