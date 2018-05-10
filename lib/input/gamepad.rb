@@ -29,10 +29,12 @@ module RoverProject
         SDL2::Joystick.num_connected_joysticks.times do |i|
           # next unless SDL2::Joystick.game_controller?(i)
           joystick = SDL2::Joystick.open(i)
+            next if @guid == joystick.GUID
             @guid = joystick.GUID
             @device_index = i
             @event_index  = joystick.index
             log("Joystick/Gamepad GUID: #{joystick.GUID}")
+            log("Joystick -> #{i}:#{joystick.index}")
           joystick.close
         end
         # Mappings from https://github.com/gabomdq/SDL_GameControllerDB/blob/master/data/SDL_gamecontrollerdb2.0.4.h
@@ -42,7 +44,8 @@ module RoverProject
           # Linux Mint on a ThinkPad T430
           #SDL2::GameController.add_mapping("#{@guid},PS4 Controller,a:b0,b:b1,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b10,leftshoulder:b4,leftstick:b11,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b12,righttrigger:a5,rightx:a3,righty:a4,start:b9,x:b3,y:b2,")
           # On Pi
-          SDL2::GameController.add_mapping("#{@guid}, PS4 Controller, a:b1,b:b2,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b4,leftstick:b10,lefttrigger:a3,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:a4,rightx:a2,righty:a5,start:b9,x:b0,y:b3")
+          #SDL2::GameController.add_mapping("#{@guid}, PS4 Controller, a:b1,b:b2,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b4,leftstick:b10,lefttrigger:a3,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:a4,rightx:a2,righty:a5,start:b9,x:b0,y:b3")
+          SDL2::GameController.add_mapping("#{@guid}, PS4 Controller, platform:Linux,x:b3,a:b0,b:b1,y:b2,back:b8,guide:b10,start:b9,dpleft:h0.8,dpdown:h0.4,dpright:h0.2,dpup:h0.1,leftshoulder:b4,lefttrigger:a2,rightshoulder:b5,righttrigger:a5,leftstick:b11,rightstick:b12,leftx:a0,lefty:a1,rightx:a3,righty:a4,")
         else
           SDL2::GameController.add_mapping("#{@guid},XInput Controller,a:b0,b:b1,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b2,y:b3,")
         end
